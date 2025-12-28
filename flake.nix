@@ -453,7 +453,7 @@
               rev = "v0.1.5";
               hash = "sha256-MHK61ZPFqBu0y/d7qpxaU8AvopgLeCpPmWNkjjo6WoI=";
             };
-            nativeBuildInputs = [ pkgs.cmake pkgs.gfortran ];
+            nativeBuildInputs = [ pkgs.cmake pkgs.gfortran pkgs.pkg-config ];
             buildInputs = with pkgs; [ glfw freetype fontconfig ];
             dontUseCmakeConfigure = true;
             buildPhase = ''

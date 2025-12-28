@@ -67,7 +67,7 @@
             nativeBuildInputs = [ pkgs.gfortran pkgs.fortran-fpm ];
             buildInputs = buildInputs;
             buildPhase = ''
-              fpm build --profile release
+              fortran-fpm build --profile release
             '';
             inherit installPhase;
           } // (builtins.removeAttrs args [

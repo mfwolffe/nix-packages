@@ -163,7 +163,7 @@
               owner = "tree3stan-chord";
               repo = "arco";
               rev = "v1.0.0";
-              hash = lib.fakeHash; # TODO: Push v1.0.0 tag to GitHub first
+              hash = "sha256-on3jImgJyzH7a3vm2Eafma1f1pUlbfR4PeyFtIERN6s=";
             };
             cargoHash = lib.fakeHash;
             buildInputs = with pkgs; [ alsa-lib ];
@@ -241,7 +241,7 @@
               owner = "tenseleyFlow";
               repo = "shellp-go"; # Note: repo is shellp-go
               rev = "v1.0.0";
-              hash = lib.fakeHash; # TODO: Push v1.0.0 tag to GitHub first
+              hash = "sha256-yERaSlaJHATZbT4ybiiJkZ88zZE6AJDgBXpG3RNo/VU=";
             };
             vendorHash = lib.fakeHash;
             meta = {

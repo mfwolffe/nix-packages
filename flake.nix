@@ -209,6 +209,11 @@
               hash = "sha256-OzkA9Dw2ZO1CahMrhnAlYpIW3jrSGEu8Ld0cFMxUNTs=";
             };
             vendorHash = "sha256-kT0CKC19lvYjNzUS+wUFWTA1IJogiQv/Lf9DQeh30FA=";
+            postInstall = ''
+              mkdir -p $out/share/parrot
+              install -Dm644 $src/parrot-hook.sh $out/share/parrot/parrot-hook.sh
+              install -Dm644 $src/parrot-hook.fish $out/share/parrot/parrot-hook.fish
+            '';
             meta = {
               description = "Intelligent roasts of failed commands";
               homepage = "https://github.com/tenseleyFlow/parrot";

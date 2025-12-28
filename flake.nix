@@ -167,6 +167,9 @@
               hash = "sha256-WuQVjd87ql9/vQk/J1ZB9mk/qqiF9QWGLFAsjdL5SCA=";
             };
             cargoHash = "sha256-gNwJkRf4adl0nDlfMxvy6QLpBalnHL5Y23CA0OLeWcg=";
+            postInstall = ''
+              mv $out/bin/wezztershier $out/bin/wezzterrust
+            '';
             meta = {
               description =
                 "High-performance Rust GUI tuner for WezTerm configuration";

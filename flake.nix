@@ -616,6 +616,9 @@
               rev = "v0.6.7";
               hash = "sha256-CxAZCT36KNd+kyJgbTnl4KqE4Kh41yWB/OSOSk7vOtI=";
             };
+            preBuild = ''
+              rm -rf dist
+            '';
             propagatedBuildInputs = with pkgs.python3Packages; [
               numpy
               rich

@@ -478,19 +478,19 @@
 
           gitswitcher = mkCMakePackage {
             pname = "gitswitcher";
-            version = "1.1.4";
+            version = "1.1.5";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "gitswitchC";
-              rev = "v1.1.4";
-              hash = "sha256-CXKB6tBO6Wwkhs6hmfWxLX1CI7MSbUCA6XWijHPTGxk=";
+              rev = "v1.1.5";
+              hash = "sha256-0LOBQ5qTO9aQPxyErDhwhY99jLUSuvREBADEJ2LzweA=";
             };
             buildInputs = with pkgs; [ git openssh openssl ];
             makeFlags = [ "BUILD_TYPE=release" ];
             installPhase = ''
               runHook preInstall
               mkdir -p $out/bin
-              make install DESTDIR=$out PREFIX=""
+              install -m 755 build/bin/gitswitch $out/bin/gitswitch
               runHook postInstall
             '';
             meta = {
@@ -528,12 +528,12 @@
 
           shtick = mkCMakePackage {
             pname = "shtick";
-            version = "1.0.0";
+            version = "1.0.1";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "shtickC";
-              rev = "v1.0.0";
-              hash = "sha256-0tXH/HlI0eQBaxyTyn5nlHfUP3JGMdkCWeSVIrm8RQU=";
+              rev = "v1.0.1";
+              hash = "sha256-KyCy5lUTwcgXpPYHLn0fnJOoJUN0hQuUBK4k1GJ87kM=";
             };
             installPhase = ''
               runHook preInstall

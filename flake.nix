@@ -218,8 +218,8 @@
             };
           };
 
-          arcorrust = mkRustPackage {
-            pname = "arcorrust";
+          arco = mkRustPackage {
+            pname = "arco";
             version = "0.1.0";
             src = pkgs.fetchFromGitHub {
               owner = "tree3stan-chord";

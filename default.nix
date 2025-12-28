@@ -211,8 +211,8 @@ let
       };
     };
 
-    arcorrust = mkRustPackage {
-      pname = "arcorrust";
+    arco = mkRustPackage {
+      pname = "arco";
       version = "0.1.0";
       src = pkgs.fetchFromGitHub {
         owner = "tree3stan-chord";
@@ -696,7 +696,4 @@ in {
   # Provide packages in the same structure the configuration expects
   packages.x86_64-linux = packages;
   packages.aarch64-linux = packages;
-
-  # Also expose packages directly for convenience
-  inherit packages;
 }

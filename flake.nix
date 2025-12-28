@@ -478,12 +478,12 @@
 
           gitswitcher = mkCMakePackage {
             pname = "gitswitcher";
-            version = "1.1.5";
+            version = "1.1.6";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "gitswitchC";
-              rev = "v1.1.5";
-              hash = "sha256-0LOBQ5qTO9aQPxyErDhwhY99jLUSuvREBADEJ2LzweA=";
+              rev = "v1.1.6";
+              hash = "sha256-tWYaUg/5CQk8jPLFPgbPsbnpBWOVWny6d1+D42gO3G8=";
             };
             buildInputs = with pkgs; [ git openssh openssl ];
             makeFlags = [ "BUILD_TYPE=release" ];
@@ -503,12 +503,12 @@
 
           gitswitch-c = mkCMakePackage {
             pname = "gitswitch-c";
-            version = "1.1.5";
+            version = "1.1.6";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "gitswitchC";
-              rev = "v1.1.5";
-              hash = "sha256-0LOBQ5qTO9aQPxyErDhwhY99jLUSuvREBADEJ2LzweA=";
+              rev = "v1.1.6";
+              hash = "sha256-tWYaUg/5CQk8jPLFPgbPsbnpBWOVWny6d1+D42gO3G8=";
             };
             buildInputs = with pkgs; [ git openssh openssl ];
             makeFlags = [ "BUILD_TYPE=release" ];

@@ -213,12 +213,12 @@ let
 
     arco = mkRustPackage {
       pname = "arco";
-      version = "0.1.0";
+      version = "0.1.1";
       src = pkgs.fetchFromGitHub {
         owner = "tree3stan-chord";
         repo = "arcorrust";
-        rev = "v0.1.0";
-        hash = "sha256-UF6B/ljJX062fiEhFM9JAgNXB11HhoPMq0nny75r+mk=";
+        rev = "v0.1.1";
+        hash = "sha256-McRIbghGIkZS+EzWHX0Xvlu/UM2v0GquoXUgmLTIw+s=";
       };
       cargoHash = "sha256-oH+uD6y8kXLPL9VeZ4PryAlPqR5scOhflH2g2TKrwlE=";
       buildInputs = with pkgs; [ alsa-lib ];

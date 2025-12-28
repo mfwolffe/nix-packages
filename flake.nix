@@ -201,12 +201,12 @@
 
           parrot-cli = mkGoPackage {
             pname = "parrot-cli";
-            version = "1.8.9";
+            version = "1.9.0";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "parrot";
-              rev = "v1.8.9";
-              hash = "sha256-MbeJpfu5xTpr6VgZuiuS78DZ3xiDL9MqWIBJspAVER0=";
+              rev = "v1.9.0";
+              hash = "sha256-OzkA9Dw2ZO1CahMrhnAlYpIW3jrSGEu8Ld0cFMxUNTs=";
             };
             vendorHash = "sha256-kT0CKC19lvYjNzUS+wUFWTA1IJogiQv/Lf9DQeh30FA=";
             meta = {

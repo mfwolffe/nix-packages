@@ -542,7 +542,14 @@
             };
           };
 
-          wmswitch = mkCMakePackage {
+          wmswitch = let
+            tomlc99 = pkgs.fetchFromGitHub {
+              owner = "cktan";
+              repo = "tomlc99";
+              rev = "26b9c1ea770dab2378e5041b695d24ccebe58a7a";
+              hash = "sha256-VWdv80klW/Wuf1PhIIoW2hdclMJ8hKmyS/cH4Y4J1AE=";
+            };
+          in pkgs.stdenv.mkDerivation {
             pname = "wmswitch";
             version = "0.1.0";
             src = pkgs.fetchFromGitHub {
@@ -551,11 +558,17 @@
               rev = "v0.1.0";
               hash = "sha256-Q8DWgSejuaFMfroFXWKURT0zE8V0Qo3yRIHxIyAuTSw=";
             };
+            nativeBuildInputs = [ pkgs.gnumake ];
+            postUnpack = ''
+              mkdir -p $sourceRoot/lib
+              cp -r ${tomlc99} $sourceRoot/lib/tomlc99
+              chmod -R +w $sourceRoot/lib/tomlc99
+            '';
             buildPhase = "make release";
             installPhase = ''
               runHook preInstall
               mkdir -p $out/bin
-              install -Dm755 wmswitch $out/bin/wmswitch
+              install -Dm755 bin/wmswitch $out/bin/wmswitch
               runHook postInstall
             '';
             meta = {

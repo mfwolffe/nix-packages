@@ -84,7 +84,7 @@
           , ... }@args:
           pkgs.stdenv.mkDerivation ({
             inherit pname version src;
-            nativeBuildInputs = [ pkgs.gnumake ];
+            nativeBuildInputs = [ pkgs.gnumake pkgs.pkg-config ];
             buildInputs = buildInputs;
             makeFlags = makeFlags;
             inherit installPhase;
@@ -503,19 +503,19 @@
 
           gitswitch-c = mkCMakePackage {
             pname = "gitswitch-c";
-            version = "1.0.0";
+            version = "1.1.5";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "gitswitchC";
-              rev = "v1.0.0";
-              hash = "sha256-HKi/85QpHZorqLVd9P3GpTiS+LPiKqgpDKQHVC0BY7E=";
+              rev = "v1.1.5";
+              hash = "sha256-0LOBQ5qTO9aQPxyErDhwhY99jLUSuvREBADEJ2LzweA=";
             };
             buildInputs = with pkgs; [ git openssh openssl ];
             makeFlags = [ "BUILD_TYPE=release" ];
             installPhase = ''
               runHook preInstall
               mkdir -p $out/bin
-              make install DESTDIR=$out PREFIX=""
+              install -m 755 build/bin/gitswitch $out/bin/gitswitch
               runHook postInstall
             '';
             meta = {

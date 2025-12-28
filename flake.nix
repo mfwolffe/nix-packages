@@ -167,8 +167,26 @@
               hash = "sha256-WuQVjd87ql9/vQk/J1ZB9mk/qqiF9QWGLFAsjdL5SCA=";
             };
             cargoHash = "sha256-gNwJkRf4adl0nDlfMxvy6QLpBalnHL5Y23CA0OLeWcg=";
+            buildInputs = with pkgs; [
+              wayland
+              libxkbcommon
+              libGL
+              xorg.libX11
+              xorg.libXcursor
+              xorg.libXi
+              xorg.libXrandr
+            ];
+            nativeBuildInputs = with pkgs; [ makeWrapper ];
             postInstall = ''
               mv $out/bin/wezztershier $out/bin/wezzterrust
+              wrapProgram $out/bin/wezzterrust \
+                --prefix LD_LIBRARY_PATH : ${
+                  pkgs.lib.makeLibraryPath [
+                    pkgs.wayland
+                    pkgs.libxkbcommon
+                    pkgs.libGL
+                  ]
+                }
             '';
             meta = {
               description =

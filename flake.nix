@@ -122,14 +122,14 @@
 
           fackr = mkRustPackage {
             pname = "fackr";
-            version = "1.1.0";
+            version = "1.1.1";
             src = pkgs.fetchFromGitHub {
               owner = "TenseleyFlow";
               repo = "fackr";
-              rev = "v1.1.0";
-              hash = "sha256-2r3iF4Fh8WHEQ6g767TBiP14MBgObkr4higoEqOPpsU=";
+              rev = "v1.1.1";
+              hash = "sha256-jDHbhw5/syKPHn+RBefXUbqTloerR3usNYkB/axY2LM=";
             };
-            cargoHash = lib.fakeHash; # Run nix build to get correct hash
+            cargoHash = "sha256-LSkTHIvGNynYSsOkXhCh4NIJM73UHt10QgHgTXBjkhU=";
             meta = {
               description =
                 "Terminal text editor written in Rust - facsimile reimplementation";
@@ -147,30 +147,11 @@
               rev = "v0.2.13";
               hash = "sha256-GGL4fJo0S1trHrmErRnL+4W8HTV8LfTJgYAZOBwZYCs=";
             };
-            cargoHash = lib.fakeHash;
+            cargoHash = "sha256-zi6z9L1MzAwPBh6utL9MWnh/hQ999py4kcniuKLX4wI=";
             buildInputs = with pkgs; [ libgit2 libssh2 openssl zlib ];
             meta = {
               description = "A git staging TUI tool - Rust port of fuss";
               homepage = "https://github.com/tenseleyFlow/fussr";
-              license = pkgs.lib.licenses.mit;
-            };
-          };
-
-          arco = mkRustPackage {
-            pname = "arco";
-            version = "1.0.0";
-            src = pkgs.fetchFromGitHub {
-              owner = "tree3stan-chord";
-              repo = "arco";
-              rev = "v1.0.0";
-              hash = "sha256-on3jImgJyzH7a3vm2Eafma1f1pUlbfR4PeyFtIERN6s=";
-            };
-            cargoHash = lib.fakeHash;
-            buildInputs = with pkgs; [ alsa-lib ];
-            meta = {
-              description =
-                "Terminal-based virtual instrument playground with real-time synthesis";
-              homepage = "https://github.com/tree3stan-chord/arco";
               license = pkgs.lib.licenses.mit;
             };
           };
@@ -184,7 +165,7 @@
               rev = "v0.3.0";
               hash = "sha256-WuQVjd87ql9/vQk/J1ZB9mk/qqiF9QWGLFAsjdL5SCA=";
             };
-            cargoHash = lib.fakeHash;
+            cargoHash = "sha256-gNwJkRf4adl0nDlfMxvy6QLpBalnHL5Y23CA0OLeWcg=";
             meta = {
               description =
                 "High-performance Rust GUI tuner for WezTerm configuration";
@@ -202,7 +183,7 @@
               rev = "v1.0.2";
               hash = "sha256-FU1qJJD3I6i0Jkdo7xa1L+soMPRfQeNsm2zTy6/ZA5Q=";
             };
-            cargoHash = lib.fakeHash;
+            cargoHash = "sha256-aMEu2csC6tvk6XhRVQVt1SDPvR1pVLWrO95PfoZ4heQ=";
             buildInputs = with pkgs; [ alsa-lib ];
             postInstall = ''
               mv $out/bin/score $out/bin/eyescore
@@ -224,9 +205,9 @@
               owner = "tenseleyFlow";
               repo = "parrot";
               rev = "v1.8.9";
-              hash = "sha256-MbeJpfu5xTtr6VgZuiuS78DZ3xiDL9MqWIBJspAVER0=";
+              hash = "sha256-MbeJpfu5xTpr6VgZuiuS78DZ3xiDL9MqWIBJspAVER0=";
             };
-            vendorHash = lib.fakeHash;
+            vendorHash = "sha256-kT0CKC19lvYjNzUS+wUFWTA1IJogiQv/Lf9DQeh30FA=";
             meta = {
               description = "Intelligent roasts of failed commands";
               homepage = "https://github.com/tenseleyFlow/parrot";
@@ -243,7 +224,7 @@
               rev = "v1.0.0";
               hash = "sha256-yERaSlaJHATZbT4ybiiJkZ88zZE6AJDgBXpG3RNo/VU=";
             };
-            vendorHash = lib.fakeHash;
+            vendorHash = "sha256-m5mBubfbXXqXKsygF5j7cHEY+bXhAMcXUts5KBKoLzM=";
             meta = {
               description =
                 "Development note-taking companion for documenting shell commands";

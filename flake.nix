@@ -218,6 +218,25 @@
             };
           };
 
+          arcorrust = mkRustPackage {
+            pname = "arcorrust";
+            version = "0.1.0";
+            src = pkgs.fetchFromGitHub {
+              owner = "tree3stan-chord";
+              repo = "arcorrust";
+              rev = "v0.1.0";
+              hash = "sha256-UF6B/ljJX062fiEhFM9JAgNXB11HhoPMq0nny75r+mk=";
+            };
+            cargoHash = "sha256-oH+uD6y8kXLPL9VeZ4PryAlPqR5scOhflH2g2TKrwlE=";
+            buildInputs = with pkgs; [ alsa-lib ];
+            meta = {
+              description =
+                "Terminal-based virtual instrument with real-time synthesis and visualization";
+              homepage = "https://github.com/tree3stan-chord/arcorrust";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
           # ============ GO PACKAGES ============
 
           parrot-cli = mkGoPackage {

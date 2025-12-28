@@ -450,6 +450,7 @@
             };
             nativeBuildInputs = [ pkgs.cmake pkgs.gfortran ];
             buildInputs = with pkgs; [ glfw freetype fontconfig ];
+            dontUseCmakeConfigure = true;
             buildPhase = ''
               cmake -B build -DCMAKE_BUILD_TYPE=Release
               cmake --build build

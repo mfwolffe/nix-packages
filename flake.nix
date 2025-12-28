@@ -64,7 +64,7 @@
           { pname, version, src, buildInputs ? [ ], installPhase, ... }@args:
           pkgs.stdenv.mkDerivation ({
             inherit pname version src;
-            nativeBuildInputs = [ pkgs.gfortran pkgs.fpm ];
+            nativeBuildInputs = [ pkgs.gfortran pkgs.fortran-fpm ];
             buildInputs = buildInputs;
             buildPhase = ''
               fpm build --profile release
@@ -656,7 +656,7 @@
 
           config = lib.mkIf config.programs.mfwolffe-packages.enable {
             environment.systemPackages = map (name:
-              self.packages.${pkgs.system}.${name})
+              self.packages.${pkgs.stdenv.hostPlatform.system}.${name})
               config.programs.mfwolffe-packages.packages;
           };
         };

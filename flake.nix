@@ -301,7 +301,7 @@
             installPhase = ''
               runHook preInstall
               mkdir -p $out/bin
-              install -Dm755 build/bin/fortsh $out/bin/fortsh
+              install -Dm755 bin/fortsh $out/bin/fortsh
               runHook postInstall
             '';
             meta = {

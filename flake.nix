@@ -531,7 +531,7 @@
             installPhase = ''
               runHook preInstall
               mkdir -p $out/bin
-              make install DESTDIR=$out PREFIX=""
+              install -Dm755 shtick $out/bin/shtick
               runHook postInstall
             '';
             meta = {

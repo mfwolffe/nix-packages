@@ -227,7 +227,7 @@
               rev = "v0.1.1";
               hash = "sha256-McRIbghGIkZS+EzWHX0Xvlu/UM2v0GquoXUgmLTIw+s=";
             };
-            cargoHash = "sha256-oH+uD6y8kXLPL9VeZ4PryAlPqR5scOhflH2g2TKrwlE=";
+            cargoHash = "sha256-XkL+XJTXZWcIJRE9xWOZEf+F9Hx1lGK4BjUo/MgmkVQ=";
             buildInputs = with pkgs; [ alsa-lib ];
             meta = {
               description =

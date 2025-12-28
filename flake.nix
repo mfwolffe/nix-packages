@@ -105,6 +105,7 @@
             format = "pyproject";
             nativeBuildInputs = with pkgs.python3Packages; [
               setuptools
+              setuptools-scm
               wheel
               hatchling
             ];
@@ -244,7 +245,7 @@
               rev = "v1.0.1";
               hash = "sha256-NXgJfSeo0WKdEDU/bks6Q4EBCZOnhe8T7TK3OiQkgek=";
             };
-            buildInputs = with pkgs; [ fzf git ];
+            buildInputs = with pkgs; [ fzf git ncurses ];
             installPhase = ''
               runHook preInstall
               mkdir -p $out/bin $out/share/fortress

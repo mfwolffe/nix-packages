@@ -486,12 +486,12 @@
 
           fortty = pkgs.stdenv.mkDerivation {
             pname = "fortty";
-            version = "0.1.5";
+            version = "0.1.6";
             src = pkgs.fetchFromGitHub {
               owner = "FortranGoingOnForty";
               repo = "fortty";
-              rev = "v0.1.5";
-              hash = "sha256-MHK61ZPFqBu0y/d7qpxaU8AvopgLeCpPmWNkjjo6WoI=";
+              rev = "v0.1.6";
+              hash = "sha256-jzPYsCZuXAkAbeZKYfx+VLT4NFovsZJ2slkefwn9auA=";
             };
             nativeBuildInputs = [ pkgs.cmake pkgs.gfortran pkgs.pkg-config ];
             buildInputs = with pkgs; [ glfw freetype fontconfig ];

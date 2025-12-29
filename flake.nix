@@ -131,6 +131,18 @@
               hash = "sha256-jDHbhw5/syKPHn+RBefXUbqTloerR3usNYkB/axY2LM=";
             };
             cargoHash = "sha256-LSkTHIvGNynYSsOkXhCh4NIJM73UHt10QgHgTXBjkhU=";
+            postInstall = ''
+              mkdir -p $out/share/applications
+              cat > $out/share/applications/fackr.desktop << EOF
+              [Desktop Entry]
+              Name=Fackr
+              Comment=Terminal text editor written in Rust
+              Exec=fackr
+              Terminal=true
+              Type=Application
+              Categories=Development;TextEditor;
+              EOF
+            '';
             meta = {
               description =
                 "Terminal text editor written in Rust - facsimile reimplementation";
@@ -150,6 +162,18 @@
             };
             cargoHash = "sha256-zi6z9L1MzAwPBh6utL9MWnh/hQ999py4kcniuKLX4wI=";
             buildInputs = with pkgs; [ libgit2 libssh2 openssl zlib ];
+            postInstall = ''
+              mkdir -p $out/share/applications
+              cat > $out/share/applications/fussr.desktop << EOF
+              [Desktop Entry]
+              Name=Fussr
+              Comment=Git staging TUI tool
+              Exec=fussr
+              Terminal=true
+              Type=Application
+              Categories=Development;RevisionControl;
+              EOF
+            '';
             meta = {
               description = "A git staging TUI tool - Rust port of fuss";
               homepage = "https://github.com/tenseleyFlow/fussr";
@@ -187,6 +211,16 @@
                     pkgs.libGL
                   ]
                 }
+              mkdir -p $out/share/applications
+              cat > $out/share/applications/wezzterrust.desktop << EOF
+              [Desktop Entry]
+              Name=WezzteRust
+              Comment=High-performance Rust GUI tuner for WezTerm configuration
+              Exec=wezzterrust
+              Terminal=false
+              Type=Application
+              Categories=Settings;TerminalEmulator;
+              EOF
             '';
             meta = {
               description =
@@ -209,6 +243,16 @@
             buildInputs = with pkgs; [ alsa-lib ];
             postInstall = ''
               mv $out/bin/score $out/bin/eyescore
+              mkdir -p $out/share/applications
+              cat > $out/share/applications/eyescore.desktop << EOF
+              [Desktop Entry]
+              Name=Eyescore
+              Comment=Professional CLI Music Notation System
+              Exec=eyescore
+              Terminal=true
+              Type=Application
+              Categories=Audio;Music;
+              EOF
             '';
             meta = {
               description =
@@ -229,6 +273,18 @@
             };
             cargoHash = "sha256-UvhW4EkqzXz9o7D6mBFU8Qbncgth+KBQa75kLBYVIB0=";
             buildInputs = with pkgs; [ alsa-lib ];
+            postInstall = ''
+              mkdir -p $out/share/applications
+              cat > $out/share/applications/arco.desktop << EOF
+              [Desktop Entry]
+              Name=Arco
+              Comment=Terminal-based virtual instrument with real-time synthesis
+              Exec=arco
+              Terminal=true
+              Type=Application
+              Categories=Audio;Music;
+              EOF
+            '';
             meta = {
               description =
                 "Terminal-based virtual instrument with real-time synthesis and visualization";
@@ -253,6 +309,16 @@
               mkdir -p $out/share/parrot
               install -Dm644 $src/parrot-hook.sh $out/share/parrot/parrot-hook.sh
               install -Dm644 $src/parrot-hook.fish $out/share/parrot/parrot-hook.fish
+              mkdir -p $out/share/applications
+              cat > $out/share/applications/parrot.desktop << EOF
+              [Desktop Entry]
+              Name=Parrot
+              Comment=Intelligent roasts of failed commands
+              Exec=parrot
+              Terminal=true
+              Type=Application
+              Categories=Development;Utility;
+              EOF
             '';
             meta = {
               description = "Intelligent roasts of failed commands";
@@ -271,6 +337,18 @@
               hash = "sha256-yERaSlaJHATZbT4ybiiJkZ88zZE6AJDgBXpG3RNo/VU=";
             };
             vendorHash = "sha256-m5mBubfbXXqXKsygF5j7cHEY+bXhAMcXUts5KBKoLzM=";
+            postInstall = ''
+              mkdir -p $out/share/applications
+              cat > $out/share/applications/shellp.desktop << EOF
+              [Desktop Entry]
+              Name=Shellp
+              Comment=Development note-taking companion for shell commands
+              Exec=shellp
+              Terminal=true
+              Type=Application
+              Categories=Development;Utility;
+              EOF
+            '';
             meta = {
               description =
                 "Development note-taking companion for documenting shell commands";
@@ -293,10 +371,19 @@
             buildInputs = with pkgs; [ fzf git ncurses ];
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin $out/share/fortress
+              mkdir -p $out/bin $out/share/fortress $out/share/applications
               install -Dm755 build/gfortran_*/app/fortress $out/bin/fortress-bin
               install -Dm644 fortress.sh $out/share/fortress/fortress.sh
               install -Dm644 fortress.fish $out/share/fortress/fortress.fish
+              cat > $out/share/applications/fortress.desktop << EOF
+              [Desktop Entry]
+              Name=Fortress
+              Comment=Command-line file explorer written in Fortran
+              Exec=fortress-bin
+              Terminal=true
+              Type=Application
+              Categories=System;FileManager;
+              EOF
               runHook postInstall
             '';
             meta = {
@@ -318,10 +405,19 @@
             };
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin
+              mkdir -p $out/bin $out/share/applications
               fac_binary=$(find build -name "fac" -type f)
               install -Dm755 "$fac_binary" $out/bin/fac
               ln -s fac $out/bin/facsimile
+              cat > $out/share/applications/facsimile.desktop << EOF
+              [Desktop Entry]
+              Name=Facsimile
+              Comment=Terminal text editor with VSCode-style keybindings
+              Exec=fac
+              Terminal=true
+              Type=Application
+              Categories=Development;TextEditor;
+              EOF
               runHook postInstall
             '';
             meta = {
@@ -346,8 +442,17 @@
             buildPhase = "make release";
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin
+              mkdir -p $out/bin $out/share/applications
               install -Dm755 bin/fortsh $out/bin/fortsh
+              cat > $out/share/applications/fortsh.desktop << EOF
+              [Desktop Entry]
+              Name=Fortsh
+              Comment=Modern Fortran shell with AST-based parsing
+              Exec=fortsh
+              Terminal=true
+              Type=Application
+              Categories=System;TerminalEmulator;
+              EOF
               runHook postInstall
             '';
             meta = {
@@ -370,8 +475,17 @@
             buildPhase = "make release";
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin
+              mkdir -p $out/bin $out/share/applications
               install -Dm755 bin/fit $out/bin/fit
+              cat > $out/share/applications/fit.desktop << EOF
+              [Desktop Entry]
+              Name=Fit
+              Comment=Terminal-based merge conflict resolver
+              Exec=fit
+              Terminal=true
+              Type=Application
+              Categories=Development;RevisionControl;
+              EOF
               runHook postInstall
             '';
             meta = {
@@ -394,8 +508,17 @@
             buildInputs = with pkgs; [ git fzf ];
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin
+              mkdir -p $out/bin $out/share/applications
               install -Dm755 fuss $out/bin/fuss
+              cat > $out/share/applications/fuss.desktop << EOF
+              [Desktop Entry]
+              Name=Fuss
+              Comment=Tree utility for dirty git files
+              Exec=fuss
+              Terminal=true
+              Type=Application
+              Categories=Development;RevisionControl;
+              EOF
               runHook postInstall
             '';
             meta = {
@@ -420,8 +543,17 @@
             buildPhase = "make release";
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin
+              mkdir -p $out/bin $out/share/applications
               install -Dm755 ferp $out/bin/ferp
+              cat > $out/share/applications/ferp.desktop << EOF
+              [Desktop Entry]
+              Name=Ferp
+              Comment=GNU grep clone written in Fortran
+              Exec=ferp
+              Terminal=true
+              Type=Application
+              Categories=Utility;TextTools;
+              EOF
               runHook postInstall
             '';
             meta = {
@@ -446,8 +578,17 @@
             '';
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin
+              mkdir -p $out/bin $out/share/applications
               install -Dm755 build/bin/fortbite $out/bin/fortbite
+              cat > $out/share/applications/fortbite.desktop << EOF
+              [Desktop Entry]
+              Name=Fortbite
+              Comment=High-precision mathematical calculator
+              Exec=fortbite
+              Terminal=true
+              Type=Application
+              Categories=Education;Science;Math;Calculator;
+              EOF
               runHook postInstall
             '';
             meta = {
@@ -470,8 +611,17 @@
             buildInputs = with pkgs; [ ncurses fzf ];
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin
+              mkdir -p $out/bin $out/share/applications
               install -Dm755 sniffert $out/bin/sniffert
+              cat > $out/share/applications/sniffert.desktop << EOF
+              [Desktop Entry]
+              Name=Sniffert
+              Comment=Terminal-based disk analyzer
+              Exec=sniffert
+              Terminal=true
+              Type=Application
+              Categories=System;Utility;FileTools;
+              EOF
               runHook postInstall
             '';
             meta = {
@@ -502,8 +652,17 @@
             '';
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin
+              mkdir -p $out/bin $out/share/applications
               install -Dm755 build/fortty $out/bin/fortty
+              cat > $out/share/applications/fortty.desktop << EOF
+              [Desktop Entry]
+              Name=Fortty
+              Comment=GPU-accelerated terminal emulator written in Fortran
+              Exec=fortty
+              Terminal=false
+              Type=Application
+              Categories=System;TerminalEmulator;
+              EOF
               runHook postInstall
             '';
             meta = {
@@ -529,8 +688,17 @@
             makeFlags = [ "BUILD_TYPE=release" ];
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin
+              mkdir -p $out/bin $out/share/applications
               install -m 755 build/bin/gitswitch $out/bin/gitswitch
+              cat > $out/share/applications/gitswitcher.desktop << EOF
+              [Desktop Entry]
+              Name=GitSwitcher
+              Comment=Secure Git identity and SSH/GPG key management
+              Exec=gitswitch
+              Terminal=true
+              Type=Application
+              Categories=Development;RevisionControl;
+              EOF
               runHook postInstall
             '';
             meta = {
@@ -554,8 +722,17 @@
             makeFlags = [ "BUILD_TYPE=release" ];
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin
+              mkdir -p $out/bin $out/share/applications
               install -m 755 build/bin/gitswitch $out/bin/gitswitch
+              cat > $out/share/applications/gitswitch-c.desktop << EOF
+              [Desktop Entry]
+              Name=GitSwitch-C
+              Comment=Safe Git identity switching with SSH/GPG isolation
+              Exec=gitswitch
+              Terminal=true
+              Type=Application
+              Categories=Development;RevisionControl;
+              EOF
               runHook postInstall
             '';
             meta = {
@@ -577,8 +754,17 @@
             };
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin
+              mkdir -p $out/bin $out/share/applications
               install -Dm755 shtick $out/bin/shtick
+              cat > $out/share/applications/shtick.desktop << EOF
+              [Desktop Entry]
+              Name=Shtick
+              Comment=Shell configuration manager for 16 different shells
+              Exec=shtick
+              Terminal=true
+              Type=Application
+              Categories=Settings;System;
+              EOF
               runHook postInstall
             '';
             meta = {
@@ -614,8 +800,17 @@
             buildPhase = "make release";
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin
+              mkdir -p $out/bin $out/share/applications
               install -Dm755 bin/wmswitch $out/bin/wmswitch
+              cat > $out/share/applications/wmswitch.desktop << EOF
+              [Desktop Entry]
+              Name=WMSwitch
+              Comment=Unified configuration manager for tiling window managers
+              Exec=wmswitch
+              Terminal=true
+              Type=Application
+              Categories=Settings;DesktopSettings;
+              EOF
               runHook postInstall
             '';
             meta = {
@@ -644,6 +839,18 @@
               spotipy
               schedule
             ];
+            postInstall = ''
+              mkdir -p $out/share/applications
+              cat > $out/share/applications/spotify-cue.desktop << EOF
+              [Desktop Entry]
+              Name=Spotify Cue
+              Comment=CLI Spotify controller with session management
+              Exec=cue
+              Terminal=true
+              Type=Application
+              Categories=Audio;Music;
+              EOF
+            '';
             meta = {
               description =
                 "Unified CLI Spotify controller with intelligent session management";
@@ -672,6 +879,18 @@
               pydantic
               toml
             ];
+            postInstall = ''
+              mkdir -p $out/share/applications
+              cat > $out/share/applications/waveterm-vis.desktop << EOF
+              [Desktop Entry]
+              Name=Waveterm Visualizer
+              Comment=Terminal-based music visualizer with ASCII art effects
+              Exec=waveterm
+              Terminal=true
+              Type=Application
+              Categories=Audio;Music;
+              EOF
+            '';
             meta = {
               description =
                 "Modern terminal-based music visualizer with ASCII art effects";
@@ -690,6 +909,18 @@
               hash = "sha256-vx/iLDn9x6sDoXI/ZsymJ5SVIzmQPzPJpevu6uTM0Yc=";
             };
             propagatedBuildInputs = with pkgs.python3Packages; [ pyqt6 ];
+            postInstall = ''
+              mkdir -p $out/share/applications
+              cat > $out/share/applications/wezztershier.desktop << EOF
+              [Desktop Entry]
+              Name=Wezztershier
+              Comment=GUI tuner for WezTerm configuration
+              Exec=wezztershier
+              Terminal=false
+              Type=Application
+              Categories=Settings;TerminalEmulator;
+              EOF
+            '';
             meta = {
               description =
                 "GUI tuner for WezTerm configuration using static decorators";

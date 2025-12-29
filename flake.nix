@@ -225,9 +225,9 @@
               owner = "tree3stan-chord";
               repo = "arcorrust";
               rev = "v0.2.0";
-              hash = "sha256-jKLMC/5FeZkL1lba2w6ytcUKBNkYt0pOgMmDrbGOZ9o=";
+              hash = "sha256-NktGPTPLA53Eo74IWRkvaZfPbYl3YM2Zd0VqzDS9zTs=";
             };
-            cargoHash = "sha256-hKX6Dy8XTuED33IwNG3K+dWO9rbz0VveIH+io/rozWM=";
+            cargoHash = "sha256-UvhW4EkqzXz9o7D6mBFU8Qbncgth+KBQa75kLBYVIB0=";
             buildInputs = with pkgs; [ alsa-lib ];
             meta = {
               description =

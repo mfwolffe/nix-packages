@@ -396,12 +396,12 @@
 
           facsimile = mkFortranFpmPackage {
             pname = "facsimile";
-            version = "0.9.4";
+            version = "0.9.6";
             src = pkgs.fetchFromGitHub {
               owner = "FortranGoingOnForty";
               repo = "facsimile";
-              rev = "v0.9.4";
-              hash = "sha256-HcYyopfe4PQ5Gb75VPTVsCNuG9azYSyDT63uU2TP5dw=";
+              rev = "v0.9.6";
+              hash = "sha256-Z4OxRYyado1SXRdqmFQwJGbixlsjUXHJOLBr8SWzrOw=";
             };
             installPhase = ''
               runHook preInstall

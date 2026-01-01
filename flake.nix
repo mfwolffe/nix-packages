@@ -123,12 +123,12 @@
 
           fackr = mkRustPackage {
             pname = "fackr";
-            version = "1.1.1";
+            version = "1.1.2";
             src = pkgs.fetchFromGitHub {
               owner = "TenseleyFlow";
               repo = "fackr";
-              rev = "v1.1.1";
-              hash = "sha256-jDHbhw5/syKPHn+RBefXUbqTloerR3usNYkB/axY2LM=";
+              rev = "v1.1.2";
+              hash = "sha256-dp1f6wXo+M0HZcOqMnypRjT86Jdgm9PDh/aNHSqvRRI=";
             };
             cargoHash = "sha256-LSkTHIvGNynYSsOkXhCh4NIJM73UHt10QgHgTXBjkhU=";
             postInstall = ''
@@ -677,12 +677,12 @@
 
           gitswitcher = mkCMakePackage {
             pname = "gitswitcher";
-            version = "1.1.6";
+            version = "1.1.7";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "gitswitchC";
-              rev = "v1.1.6";
-              hash = "sha256-tWYaUg/5CQk8jPLFPgbPsbnpBWOVWny6d1+D42gO3G8=";
+              rev = "v1.1.7";
+              hash = "sha256-WPQB+P6xkXQT3uIOfb8IRCS5VaDmepEqD5MhD432x58=";
             };
             buildInputs = with pkgs; [ git openssh openssl ];
             makeFlags = [ "BUILD_TYPE=release" ];
@@ -711,12 +711,12 @@
 
           gitswitch-c = mkCMakePackage {
             pname = "gitswitch-c";
-            version = "1.1.6";
+            version = "1.1.7";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "gitswitchC";
-              rev = "v1.1.6";
-              hash = "sha256-tWYaUg/5CQk8jPLFPgbPsbnpBWOVWny6d1+D42gO3G8=";
+              rev = "v1.1.7";
+              hash = "sha256-WPQB+P6xkXQT3uIOfb8IRCS5VaDmepEqD5MhD432x58=";
             };
             buildInputs = with pkgs; [ git openssh openssl ];
             makeFlags = [ "BUILD_TYPE=release" ];

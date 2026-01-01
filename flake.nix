@@ -130,7 +130,7 @@
               rev = "v1.1.2";
               hash = "sha256-dp1f6wXo+M0HZcOqMnypRjT86Jdgm9PDh/aNHSqvRRI=";
             };
-            cargoHash = "sha256-LSkTHIvGNynYSsOkXhCh4NIJM73UHt10QgHgTXBjkhU=";
+            cargoHash = "sha256-TuVdCLMZuN1DQKg9lMkY4IytrZZEvg26tjm5jW098Co=";
             postInstall = ''
               mkdir -p $out/share/applications
               cat > $out/share/applications/fackr.desktop << EOF

@@ -293,6 +293,37 @@
             };
           };
 
+          hyprkvm = mkRustPackage {
+            pname = "hyprkvm";
+            version = "0.5.1";
+            src = pkgs.fetchFromGitHub {
+              owner = "tenseleyFlow";
+              repo = "hyprKVM";
+              rev = "v0.5.1";
+              hash = "sha256-oXbH2+HiSs66ubf60QsdGhPv5Yy5FFyR3982e+Ip5DE=";
+            };
+            cargoHash = "sha256-sH/5xM7EZmN17VPtYSIiB/1y4xPU2HKRSJFaeNR3Ylo=";
+            buildInputs = with pkgs; [ wayland wayland-protocols libxkbcommon ];
+            postInstall = ''
+              mkdir -p $out/share/applications
+              cat > $out/share/applications/hyprkvm.desktop << EOF
+              [Desktop Entry]
+              Name=HyprKVM
+              Comment=Hyprland-native software KVM switch
+              Exec=hyprkvm daemon
+              Terminal=false
+              Type=Application
+              Categories=Utility;System;
+              EOF
+            '';
+            meta = {
+              description =
+                "Hyprland-native software KVM switch for seamless keyboard/mouse sharing";
+              homepage = "https://github.com/tenseleyFlow/hyprKVM";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
           # ============ GO PACKAGES ============
 
           parrot-cli = mkGoPackage {

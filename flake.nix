@@ -295,14 +295,14 @@
 
           hyprkvm = mkRustPackage {
             pname = "hyprkvm";
-            version = "0.6.1";
+            version = "0.6.2";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "hyprKVM";
-              rev = "v0.6.1";
-              hash = "sha256-WpD/DPmkGoexWTmdQUF/I4gp8zdf7/3p1C/wBFSnmco=";
+              rev = "v0.6.2";
+              hash = "sha256-loUldTdWWlKFSKIzqp4GsOLJIJyhS4m9zuRYu1Mii6I=";
             };
-            cargoHash = "sha256-cHvHM6hxoTFCCK6mzd0hNYlqkQm4um0xZyY/6iaW70E=";
+            cargoHash = "sha256-AWzfuOAs9yTLO9vEDZrxfnjXPGA7YlRxxRg76PIn9Gg=";
             buildInputs = with pkgs; [ wayland wayland-protocols libxkbcommon ];
             postInstall = ''
               mkdir -p $out/share/applications

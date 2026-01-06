@@ -264,12 +264,12 @@
 
           arco = mkRustPackage {
             pname = "arco";
-            version = "0.3.0";
+            version = "0.4.0";
             src = pkgs.fetchFromGitHub {
               owner = "tree3stan-chord";
               repo = "arcorrust";
-              rev = "v0.3.0";
-              hash = "sha256-Zi2JBXC+1UNus9rDRGWQxoknZplQwgb+Torbiv6Zkl8=";
+              rev = "v0.4.0";
+              hash = "sha256-f4i7NHcN9adtVvu4clTMMR1RKL78aZDdPrNw893+PYQ=";
             };
             cargoHash = "sha256-WKPrn7Breni2pv+MbPQbLJwW6o7tG5L+vqihNW8I8EY=";
             buildInputs = with pkgs; [ alsa-lib ];
@@ -295,12 +295,12 @@
 
           hyprkvm = mkRustPackage {
             pname = "hyprkvm";
-            version = "0.6.5";
+            version = "0.6.6";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "hyprKVM";
-              rev = "v0.6.5";
-              hash = "sha256-RBNgXtwvngTj9/uLvz6bVhSHSEMBsjpBuP15TrNuOk0=";
+              rev = "v0.6.6";
+              hash = "sha256-bxzHVAdGKSpBuCUrynzBJL6zOUk0m5Q6b3RwZcswWyE=";
             };
             cargoHash = "sha256-6IyctLwqXIHwtGNkrq5p7AY3u1FOpjFHDAsD4l59Jm0=";
             buildInputs = with pkgs; [ wayland wayland-protocols libxkbcommon ];

@@ -271,7 +271,7 @@
               rev = "v0.4.0";
               hash = "sha256-f4i7NHcN9adtVvu4clTMMR1RKL78aZDdPrNw893+PYQ=";
             };
-            cargoHash = "sha256-WKPrn7Breni2pv+MbPQbLJwW6o7tG5L+vqihNW8I8EY=";
+            cargoHash = "sha256-n9drDijBpxzpBqus9zRSRTKDCSe61HBpEOPiKH63KPw=";
             buildInputs = with pkgs; [ alsa-lib ];
             postInstall = ''
               mkdir -p $out/share/applications

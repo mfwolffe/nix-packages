@@ -302,7 +302,7 @@
               rev = "v0.6.6";
               hash = "sha256-bxzHVAdGKSpBuCUrynzBJL6zOUk0m5Q6b3RwZcswWyE=";
             };
-            cargoHash = "sha256-6IyctLwqXIHwtGNkrq5p7AY3u1FOpjFHDAsD4l59Jm0=";
+            cargoHash = "sha256-yoYaamk7yZxTB2WaxrJZXe9Gtlp/Kt52MTukSw3gxzo=";
             buildInputs = with pkgs; [ wayland wayland-protocols libxkbcommon ];
             postInstall = ''
               mkdir -p $out/share/applications

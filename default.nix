@@ -232,14 +232,14 @@ let
 
     firp = mkRustPackage {
       pname = "firp";
-      version = "0.1.0";
+      version = "0.2.0";
       src = pkgs.fetchFromGitHub {
         owner = "FortranGoingOnForty";
         repo = "firp";
-        rev = "v0.1.0";
-        hash = "sha256-flHpI389nHu+Ae0KfmDPlKAKe3dRqaAayugEMwbbFeY=";
+        rev = "v0.2.0";
+        hash = "sha256-gh1COa4xy50KwhjML9t5d5k4LpWFyC7gJiYYB3kbDM0=";
       };
-      cargoHash = "sha256-NNwyjQHxIwpc3cIacXNePaSVwrg0GlKtLDPrwKnHo98=";
+      cargoHash = "sha256-ihKVw2B4+GsKasbdlQodqrSpj2J5j1tQSr2WRH3DG3Y=";
       meta = {
         description =
           "A Modern Fortran Interpreter with REPL, debugger, and JIT compilation";

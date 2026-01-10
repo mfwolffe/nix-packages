@@ -230,6 +230,24 @@ let
       };
     };
 
+    firp = mkRustPackage {
+      pname = "firp";
+      version = "0.1.0";
+      src = pkgs.fetchFromGitHub {
+        owner = "FortranGoingOnForty";
+        repo = "firp";
+        rev = "v0.1.0";
+        hash = "sha256-flHpI389nHu+Ae0KfmDPlKAKe3dRqaAayugEMwbbFeY=";
+      };
+      cargoHash = "sha256-NNwyjQHxIwpc3cIacXNePaSVwrg0GlKtLDPrwKnHo98=";
+      meta = {
+        description =
+          "A Modern Fortran Interpreter with REPL, debugger, and JIT compilation";
+        homepage = "https://github.com/FortranGoingOnForty/firp";
+        license = pkgs.lib.licenses.mit;
+      };
+    };
+
     # ============ GO PACKAGES ============
 
     parrot-cli = mkGoPackage {

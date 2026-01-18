@@ -746,6 +746,7 @@
               xorg.libxcb
               xorg.libX11
               xorg.libXrandr
+              xorg.xorgserver
               cairo
               pango
               glib
@@ -754,6 +755,12 @@
               fontconfig
               pam
             ];
+
+            # Patch hardcoded /usr/bin/Xorg path for NixOS
+            postPatch = ''
+              substituteInPlace gardmd/src/x11.rs \
+                --replace-fail '"/usr/bin/Xorg"' '"${pkgs.xorg.xorgserver}/bin/Xorg"'
+            '';
 
             # Required for pam-sys bindgen
             LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";

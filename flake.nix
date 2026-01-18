@@ -417,8 +417,10 @@
               EOF
             '';
 
-            # Runtime dependencies (picom for compositing)
-            passthru.optionalDependencies = [ pkgs.picom ];
+            passthru = {
+              providedSessions = [ "gar" ];
+              optionalDependencies = [ pkgs.picom ];
+            };
 
             meta = {
               description = "Tiling window manager with Lua configuration and smart splits";

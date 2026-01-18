@@ -756,10 +756,12 @@
               pam
             ];
 
-            # Patch hardcoded /usr/bin/Xorg path for NixOS
+            # Patch hardcoded paths for NixOS
             postPatch = ''
               substituteInPlace gardmd/src/x11.rs \
                 --replace-fail '"/usr/bin/Xorg"' '"${pkgs.xorg.xorgserver}/bin/Xorg"'
+              substituteInPlace gardmd/src/config.rs \
+                --replace-fail '"/usr/bin/gardm-greeter"' "\"$out/bin/gardm-greeter\""
             '';
 
             # Required for pam-sys bindgen

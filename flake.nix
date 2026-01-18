@@ -628,7 +628,7 @@
             ];
 
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
-              inherit (pkgs.stdenv) system;
+              inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
               sourceRoot = "gardesk-src/garlaunch";
               hash = "sha256-kSyQSAIynkWATdQX36pBBvl5Pd/NbxaSF/Msalp9Wao=";
@@ -683,7 +683,7 @@
             ];
 
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
-              inherit (pkgs.stdenv) system;
+              inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
               sourceRoot = "gardesk-src/garclip";
               hash = "sha256-sL0h8ektkvAQjbBohKG+YDjSCSHogyVT1q16jW3VJHI=";

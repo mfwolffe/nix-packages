@@ -12,6 +12,15 @@
         pkgs = import nixpkgs { inherit system; };
         lib = pkgs.lib;
 
+        # Shared source for gardesk suite (monorepo with submodules)
+        gardesk-src = pkgs.fetchgit {
+          url = "https://github.com/gardesk/gardesk";
+          rev = "904650866396df3458cf143dd9bcf1a3bcc06d6f";
+          hash = "sha256-dkKtUohIGzl21qLmerqJBhkgZV7NMB3gFGd9/EtiH0s=";
+          fetchSubmodules = true;
+          name = "gardesk-src";
+        };
+
         # Helper for Rust packages
         mkRustPackage = { pname, version, src, cargoHash ? null, cargoLock ? null
           , buildInputs ? [ ], nativeBuildInputs ? [ ], ... }@args:
@@ -350,6 +359,431 @@
               description =
                 "A Modern Fortran Interpreter with REPL, debugger, and JIT compilation";
               homepage = "https://github.com/FortranGoingOnForty/firp";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # ============ GARDESK SUITE ============
+          # Modular X11 desktop environment - https://gar.dev
+          # NOTE: Uses fetchgit with submodules for path dependencies
+
+          # gar: Tiling window manager with Lua config
+          gar = pkgs.rustPlatform.buildRustPackage {
+            pname = "gar";
+            version = "0.1.0";
+            src = gardesk-src;
+            sourceRoot = "gardesk-src/gar";
+            cargoHash = "sha256-UCg3kaKCi8L+Tr//arjMpesAtxNgDhSnyGdwUddNKnU=";
+
+            nativeBuildInputs = with pkgs; [ pkg-config makeWrapper ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+            ];
+
+            cargoBuildFlags = [ "-p" "gar" "-p" "garctl" ];
+
+            postInstall = ''
+              # Install session wrapper script
+              mkdir -p $out/share/gar
+              install -Dm755 gar-session.sh $out/share/gar/gar-session.sh
+
+              # Wrap session script with runtime dependencies in PATH
+              makeWrapper $out/share/gar/gar-session.sh $out/bin/gar-session \
+                --prefix PATH : ${lib.makeBinPath [ pkgs.picom pkgs.systemd pkgs.dbus ]} \
+                --set GAR_BIN "$out/bin/gar"
+
+              # XSession entry uses the wrapped session script (not gar directly)
+              mkdir -p $out/share/xsessions
+              cat > $out/share/xsessions/gar.desktop << EOF
+              [Desktop Entry]
+              Name=gar
+              Comment=gar tiling window manager
+              Exec=$out/bin/gar-session
+              Type=XSession
+              DesktopNames=gar
+              EOF
+
+              # Install systemd user target for gar session
+              mkdir -p $out/lib/systemd/user
+              cat > $out/lib/systemd/user/gar-session.target << EOF
+              [Unit]
+              Description=gar window manager session
+              Documentation=man:systemd.special(7)
+              BindsTo=graphical-session.target
+              Wants=graphical-session-pre.target
+              After=graphical-session-pre.target
+              EOF
+            '';
+
+            # Runtime dependencies (picom for compositing)
+            passthru.optionalDependencies = [ pkgs.picom ];
+
+            meta = {
+              description = "Tiling window manager with Lua configuration and smart splits";
+              homepage = "https://github.com/gardesk/gar";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # garbar: Status bar with Cairo/Pango rendering
+          garbar = pkgs.rustPlatform.buildRustPackage {
+            pname = "garbar";
+            version = "0.1.0";
+            src = gardesk-src;
+            sourceRoot = "gardesk-src/garbar";
+            cargoHash = "sha256-p0mJxoKV1ozS2kbzvznu0S3RmaUPAIIr7JhsVD4B4wM=";
+
+            nativeBuildInputs = with pkgs; [ pkg-config ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              xorg.libXfixes
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+            ];
+
+            cargoBuildFlags = [ "-p" "garbar" "-p" "garbarctl" ];
+
+            meta = {
+              description = "Status bar with Cairo/Pango rendering for the gar desktop suite";
+              homepage = "https://github.com/gardesk/garbar";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # garbg: Wallpaper daemon with animation support
+          garbg = pkgs.rustPlatform.buildRustPackage {
+            pname = "garbg";
+            version = "0.1.0";
+            src = gardesk-src;
+            sourceRoot = "gardesk-src/garbg";
+            cargoHash = "sha256-PqsmAJaBL1cUaiE5zytExSBtBbhA2kGbNhG4i+5Nkg8=";
+
+            # Use ffmpeg_7 (not ffmpeg-full/8.0) - avfft.h removed in FFmpeg 8.0
+            nativeBuildInputs = with pkgs; [ pkg-config clang llvmPackages.libclang ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              openssl
+              ffmpeg_7
+            ];
+
+            # Required for ffmpeg-sys-next bindgen
+            LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
+
+            # Comprehensive bindgen fix for Nix - expose gcc-wrapper flags to libclang
+            # See: https://hoverbear.org/blog/rust-bindgen-in-nix/
+            preBuild = ''
+              export BINDGEN_EXTRA_CLANG_ARGS="$(< ${pkgs.stdenv.cc}/nix-support/libc-crt1-cflags) \
+                $(< ${pkgs.stdenv.cc}/nix-support/libc-cflags) \
+                $(< ${pkgs.stdenv.cc}/nix-support/cc-cflags) \
+                ${lib.optionalString pkgs.stdenv.cc.isGNU "-isystem ${pkgs.stdenv.cc.cc}/include/c++/${lib.getVersion pkgs.stdenv.cc.cc} -isystem ${pkgs.stdenv.cc.cc}/include/c++/${lib.getVersion pkgs.stdenv.cc.cc}/${pkgs.stdenv.hostPlatform.config} -idirafter ${pkgs.stdenv.cc.cc}/lib/gcc/${pkgs.stdenv.hostPlatform.config}/${lib.getVersion pkgs.stdenv.cc.cc}/include"} \
+                -I${pkgs.ffmpeg_7.dev}/include"
+            '';
+
+            postInstall = ''
+              # Install systemd user service
+              mkdir -p $out/lib/systemd/user
+              cat > $out/lib/systemd/user/garbg.service << EOF
+              [Unit]
+              Description=garbg wallpaper daemon
+              Documentation=https://gar.dev
+              After=graphical-session.target
+              PartOf=graphical-session.target
+
+              [Service]
+              Type=simple
+              ExecStart=$out/bin/garbg daemon
+              Restart=on-failure
+              RestartSec=3
+
+              [Install]
+              WantedBy=graphical-session.target
+              EOF
+            '';
+
+            meta = {
+              description = "Wallpaper daemon with animation and slideshow support";
+              homepage = "https://github.com/gardesk/garbg";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # garshot: Screenshot utility with blur selection overlay
+          garshot = pkgs.rustPlatform.buildRustPackage {
+            pname = "garshot";
+            version = "0.1.0";
+            src = gardesk-src;
+            sourceRoot = "gardesk-src/garshot";
+            cargoHash = "sha256-cg8ACAkxRhKfklzHYLOgD44Wc88j5UaQ7qHLzYw+vW0=";
+
+            nativeBuildInputs = with pkgs; [ pkg-config ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              xorg.libXfixes
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+            ];
+
+            cargoBuildFlags = [ "-p" "garshot" "-p" "garshotctl" ];
+
+            postInstall = ''
+              mkdir -p $out/share/applications
+              cat > $out/share/applications/garshot.desktop << EOF
+              [Desktop Entry]
+              Name=Garshot
+              Comment=Screenshot utility with blur selection overlay
+              Exec=$out/bin/garshot select
+              Terminal=false
+              Type=Application
+              Categories=Utility;Graphics;
+              EOF
+            '';
+
+            meta = {
+              description = "Screenshot utility with interactive blur selection overlay";
+              homepage = "https://github.com/gardesk/garshot";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # garlock: Screen locker with PAM authentication
+          garlock = pkgs.rustPlatform.buildRustPackage {
+            pname = "garlock";
+            version = "0.1.0";
+            src = gardesk-src;
+            sourceRoot = "gardesk-src/garlock";
+            cargoHash = "sha256-x98QlMesEEItBq7gDHxuHEmVzz3pVUHqXXgCQNaoipw=";
+
+            nativeBuildInputs = with pkgs; [ pkg-config ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+              pam
+            ];
+
+            meta = {
+              description = "Screen locker with PAM authentication for the gar desktop suite";
+              homepage = "https://github.com/gardesk/garlock";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # garlaunch: Application launcher (needs full tree for gartk path deps)
+          garlaunch = pkgs.stdenv.mkDerivation {
+            pname = "garlaunch";
+            version = "0.2.0";
+            src = gardesk-src;
+
+            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+            ];
+
+            cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+              inherit (pkgs.stdenv) system;
+              src = gardesk-src;
+              sourceRoot = "gardesk-src/garlaunch";
+              hash = "sha256-kSyQSAIynkWATdQX36pBBvl5Pd/NbxaSF/Msalp9Wao=";
+            };
+            cargoRoot = "garlaunch";
+
+            buildPhase = ''
+              cd garlaunch
+              cargo build --release --offline -p garlaunch -p garlaunchctl
+            '';
+
+            installPhase = ''
+              mkdir -p $out/bin $out/share/applications
+              cp target/release/garlaunch $out/bin/
+              cp target/release/garlaunchctl $out/bin/
+              cat > $out/share/applications/garlaunch.desktop << EOF
+              [Desktop Entry]
+              Name=Garlaunch
+              Comment=Application launcher with fuzzy search
+              Exec=$out/bin/garlaunch
+              Terminal=false
+              Type=Application
+              Categories=Utility;
+              EOF
+            '';
+
+            meta = {
+              description = "Application launcher with fuzzy search for the gar desktop suite";
+              homepage = "https://github.com/gardesk/garlaunch";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # garclip: Clipboard manager (needs full tree for gartk path deps)
+          garclip = pkgs.stdenv.mkDerivation {
+            pname = "garclip";
+            version = "0.1.0";
+            src = gardesk-src;
+
+            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              xorg.libXfixes
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+            ];
+
+            cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+              inherit (pkgs.stdenv) system;
+              src = gardesk-src;
+              sourceRoot = "gardesk-src/garclip";
+              hash = "sha256-sL0h8ektkvAQjbBohKG+YDjSCSHogyVT1q16jW3VJHI=";
+            };
+            cargoRoot = "garclip";
+
+            buildPhase = ''
+              cd garclip
+              cargo build --release --offline -p garclip -p garclipctl -p garclip-picker
+            '';
+
+            installPhase = ''
+              mkdir -p $out/bin $out/share/applications
+              cp target/release/garclip $out/bin/
+              cp target/release/garclipctl $out/bin/
+              cp target/release/garclip-picker $out/bin/
+              cat > $out/share/applications/garclip.desktop << EOF
+              [Desktop Entry]
+              Name=Garclip
+              Comment=Clipboard manager with history
+              Exec=$out/bin/garclip-picker
+              Terminal=false
+              Type=Application
+              Categories=Utility;
+              EOF
+
+              # Install systemd user service
+              mkdir -p $out/lib/systemd/user
+              cat > $out/lib/systemd/user/garclip.service << EOF
+              [Unit]
+              Description=garclip clipboard manager
+              Documentation=https://gar.dev
+              PartOf=graphical-session.target
+              After=graphical-session.target
+
+              [Service]
+              Type=simple
+              ExecStart=$out/bin/garclip daemon --foreground
+              ExecReload=/bin/kill -HUP \$MAINPID
+              Restart=on-failure
+              RestartSec=1
+
+              [Install]
+              WantedBy=graphical-session.target
+              EOF
+            '';
+
+            meta = {
+              description = "Clipboard manager with history for the gar desktop suite";
+              homepage = "https://github.com/gardesk/garclip";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # gardm: Display manager with PAM and systemd integration
+          gardm = pkgs.rustPlatform.buildRustPackage {
+            pname = "gardm";
+            version = "0.1.0";
+            src = gardesk-src;
+            sourceRoot = "gardesk-src/gardm";
+            cargoHash = "sha256-cNKo8ZkPecEXHAtJsqJiFiYHb/43rvZoKRT+MJ/JgDc=";
+
+            nativeBuildInputs = with pkgs; [ pkg-config ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+              pam
+            ];
+
+            cargoBuildFlags = [ "-p" "gardmd" "-p" "gardm-greeter" ];
+
+            postInstall = ''
+              mkdir -p $out/share/gardm/pam.d
+              cat > $out/share/gardm/pam.d/gardm << EOF
+              #%PAM-1.0
+              auth       include      login
+              account    include      login
+              password   include      login
+              session    include      login
+              EOF
+
+              # Install systemd system service
+              mkdir -p $out/lib/systemd/system
+              cat > $out/lib/systemd/system/gardm.service << EOF
+              [Unit]
+              Description=gar Display Manager
+              Documentation=https://gar.dev
+              After=systemd-user-sessions.service getty@tty1.service plymouth-quit.service systemd-logind.service
+              Conflicts=getty@tty1.service
+              PartOf=graphical.target
+              StartLimitIntervalSec=30
+              StartLimitBurst=2
+
+              [Service]
+              Type=notify
+              ExecStart=$out/bin/gardmd
+              ExecReload=/bin/kill -HUP \$MAINPID
+              Restart=always
+              RestartSec=1
+              PrivateTmp=no
+
+              [Install]
+              Alias=display-manager.service
+              EOF
+            '';
+
+            passthru.providedSessions = [ "gar" ];
+
+            meta = {
+              description = "Display manager with graphical greeter for the gar desktop suite";
+              homepage = "https://github.com/gardesk/gardm";
               license = pkgs.lib.licenses.mit;
             };
           };

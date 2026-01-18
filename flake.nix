@@ -583,6 +583,7 @@
               freetype
               fontconfig
               pam
+              libxkbcommon
             ];
 
             # Required for pam-sys bindgen

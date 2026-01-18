@@ -388,8 +388,10 @@
               # Install session wrapper script
               mkdir -p $out/share/gar
               install -Dm755 gar-session.sh $out/share/gar/gar-session.sh
-              # Fix shebang for NixOS (#!/bin/bash -> /nix/store/.../bash)
-              patchShebangs $out/share/gar/gar-session.sh
+              # Fix shebang for NixOS - patchShebangs doesn't work because /bin/bash
+              # doesn't exist in the build sandbox, so we substitute explicitly
+              substituteInPlace $out/share/gar/gar-session.sh \
+                --replace-fail '#!/bin/bash' '#!${pkgs.bash}/bin/bash'
 
               # Wrap session script with runtime dependencies in PATH
               makeWrapper $out/share/gar/gar-session.sh $out/bin/gar-session \

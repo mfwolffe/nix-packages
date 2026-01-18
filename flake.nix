@@ -760,6 +760,9 @@
             postPatch = ''
               substituteInPlace gardmd/src/x11.rs \
                 --replace-fail '"/usr/bin/Xorg"' '"${pkgs.xorg.xorgserver}/bin/Xorg"'
+              # Add modulepath to include nvidia driver from system path
+              substituteInPlace gardmd/src/x11.rs \
+                --replace-fail '.arg("-nolisten")' '.arg("-modulepath").arg("/run/current-system/sw/lib/xorg/modules").arg("-nolisten")'
               substituteInPlace gardmd/src/config.rs \
                 --replace-fail '"/usr/bin/gardm-greeter"' "\"$out/bin/gardm-greeter\""
             '';

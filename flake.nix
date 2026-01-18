@@ -388,10 +388,13 @@
               # Install session wrapper script
               mkdir -p $out/share/gar
               install -Dm755 gar-session.sh $out/share/gar/gar-session.sh
+              # Fix shebang for NixOS (#!/bin/bash -> /nix/store/.../bash)
+              patchShebangs $out/share/gar/gar-session.sh
 
               # Wrap session script with runtime dependencies in PATH
               makeWrapper $out/share/gar/gar-session.sh $out/bin/gar-session \
                 --prefix PATH : ${lib.makeBinPath [ pkgs.picom pkgs.systemd pkgs.dbus ]} \
+                --prefix PATH : /run/current-system/sw/bin \
                 --set GAR_BIN "$out/bin/gar"
 
               # XSession entry uses the wrapped session script (not gar directly)
@@ -769,6 +772,9 @@
               substituteInPlace gardmd/src/sessions.rs \
                 --replace-fail '"/usr/share/xsessions",' '"/run/current-system/sw/share/xsessions", "/usr/share/xsessions",' \
                 --replace-fail '"/usr/share/wayland-sessions",' '"/run/current-system/sw/share/wayland-sessions", "/usr/share/wayland-sessions",'
+              # Add NixOS paths to session PATH
+              substituteInPlace gardmd/src/session.rs \
+                --replace-fail '"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"' '"/run/current-system/sw/bin:/run/wrappers/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"'
             '';
 
             # Required for pam-sys bindgen

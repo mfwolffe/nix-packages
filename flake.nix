@@ -765,6 +765,10 @@
                 --replace-fail '.arg("-nolisten")' '.arg("-modulepath").arg("/run/current-system/sw/lib/xorg/modules").arg("-nolisten")'
               substituteInPlace gardmd/src/config.rs \
                 --replace-fail '"/usr/bin/gardm-greeter"' "\"$out/bin/gardm-greeter\""
+              # Add NixOS session directories
+              substituteInPlace gardmd/src/sessions.rs \
+                --replace-fail '"/usr/share/xsessions",' '"/run/current-system/sw/share/xsessions", "/usr/share/xsessions",' \
+                --replace-fail '"/usr/share/wayland-sessions",' '"/run/current-system/sw/share/wayland-sessions", "/usr/share/wayland-sessions",'
             '';
 
             # Required for pam-sys bindgen

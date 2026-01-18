@@ -373,7 +373,7 @@
             version = "0.1.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/gar";
-            cargoHash = "sha256-UCg3kaKCi8L+Tr//arjMpesAtxNgDhSnyGdwUddNKnU=";
+            cargoHash = "sha256-yqNmtnNQLBEIhL4+zLpJymKXoH2sd3iGifjqbThxEOw=";
 
             nativeBuildInputs = with pkgs; [ pkg-config makeWrapper ];
             buildInputs = with pkgs; [

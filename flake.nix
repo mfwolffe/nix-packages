@@ -740,7 +740,7 @@
             sourceRoot = "gardesk-src/gardm";
             cargoHash = "sha256-cNKo8ZkPecEXHAtJsqJiFiYHb/43rvZoKRT+MJ/JgDc=";
 
-            nativeBuildInputs = with pkgs; [ pkg-config ];
+            nativeBuildInputs = with pkgs; [ pkg-config clang llvmPackages.libclang ];
             buildInputs = with pkgs; [
               xorg.libxcb
               xorg.libX11
@@ -753,6 +753,16 @@
               fontconfig
               pam
             ];
+
+            # Required for pam-sys bindgen
+            LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
+
+            preBuild = ''
+              export BINDGEN_EXTRA_CLANG_ARGS="$(< ${pkgs.stdenv.cc}/nix-support/libc-crt1-cflags) \
+                $(< ${pkgs.stdenv.cc}/nix-support/libc-cflags) \
+                $(< ${pkgs.stdenv.cc}/nix-support/cc-cflags) \
+                ${lib.optionalString pkgs.stdenv.cc.isGNU "-isystem ${pkgs.stdenv.cc.cc}/include/c++/${lib.getVersion pkgs.stdenv.cc.cc} -isystem ${pkgs.stdenv.cc.cc}/include/c++/${lib.getVersion pkgs.stdenv.cc.cc}/${pkgs.stdenv.hostPlatform.config} -idirafter ${pkgs.stdenv.cc.cc}/lib/gcc/${pkgs.stdenv.hostPlatform.config}/${lib.getVersion pkgs.stdenv.cc.cc}/include"}"
+            '';
 
             cargoBuildFlags = [ "-p" "gardmd" "-p" "gardm-greeter" ];
 

@@ -15,8 +15,8 @@
         # Shared source for gardesk suite (monorepo with submodules)
         gardesk-src = pkgs.fetchgit {
           url = "https://github.com/gardesk/gardesk";
-          rev = "a39277f562eb602d9594e8b79ce439327aa179cc";
-          hash = "sha256-lImNV3E5kLmMzjoKHCfkdCmw/k1WBlMRbeMwpFNxoak=";
+          rev = "91f208152764aac310c522d182cdfa7529679811";
+          hash = "sha256-vbgK6yxKcxKcWv3wbRn4i7R6f5wALmDcH8rv20d7dKU=";
           fetchSubmodules = true;
           name = "gardesk-src";
         };
@@ -440,7 +440,7 @@
             version = "0.1.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/garbar";
-            cargoHash = "sha256-p0mJxoKV1ozS2kbzvznu0S3RmaUPAIIr7JhsVD4B4wM=";
+            cargoHash = "sha256-Wic0NzJ9Zgsspy6xkQyjITg/MlabbRpqCgIYn2sx5K0=";
 
             nativeBuildInputs = with pkgs; [ pkg-config ];
             buildInputs = with pkgs; [

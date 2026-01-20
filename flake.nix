@@ -15,8 +15,8 @@
         # Shared source for gardesk suite (monorepo with submodules)
         gardesk-src = pkgs.fetchgit {
           url = "https://github.com/gardesk/gardesk";
-          rev = "76c1c5053fb35f8fae0eab72a831bc2d6b33ac22";
-          hash = "sha256-KDDR7fy1LkD6114LyGyX+YwL6Zo84c34LfOvrPI+Jg8=";
+          rev = "e7b881af8859dcd5f29b0e5e2dd608dcf44fae19";
+          hash = "sha256-92ijTlasZ6EZE25lx0P2m4FFJQFp7vLCOp1EhDx5q6k=";
           fetchSubmodules = true;
           name = "gardesk-src";
         };

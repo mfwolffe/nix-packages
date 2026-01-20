@@ -363,6 +363,24 @@
             };
           };
 
+          gump = pkgs.rustPlatform.buildRustPackage {
+            pname = "gump";
+            version = "0.2.1";
+            src = pkgs.fetchFromGitHub {
+              owner = "tenseleyFlow";
+              repo = "gump";
+              rev = "v0.2.1";
+              hash = "sha256-Vb+5EDtodJS2kGjW5vM2/f3X873e1Z3tyh7JcaAEcjU=";
+            };
+            cargoHash = "sha256-853XHoTQjymZ52eo/NoKvZGEmA+1xr+7Yq5KbwrGKJ8=";
+            meta = {
+              description = "A smarter cd command - zoxide without the z";
+              homepage = "https://github.com/tenseleyFlow/gump";
+              license = pkgs.lib.licenses.mit;
+              mainProgram = "gump";
+            };
+          };
+
           # ============ GARDESK SUITE ============
           # Modular X11 desktop environment - https://gar.dev
           # NOTE: Uses fetchgit with submodules for path dependencies

@@ -744,7 +744,7 @@
             version = "0.1.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/gardm";
-            cargoHash = "sha256-3Pf9lmZknR1nFUUwKZy1eyG7o2YXKax9AjCe4ht/tNU=";
+            cargoHash = "sha256-XvqGD6ybVa37/YJmwdcbixdWFMrwvLscxdqIy5ihplg=";
 
             nativeBuildInputs = with pkgs; [ pkg-config clang llvmPackages.libclang ];
             buildInputs = with pkgs; [

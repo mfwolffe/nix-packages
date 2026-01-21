@@ -365,14 +365,14 @@
 
           gump = pkgs.rustPlatform.buildRustPackage {
             pname = "gump";
-            version = "0.2.1";
+            version = "0.2.2";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "gump";
-              rev = "v0.2.1";
-              hash = "sha256-Vb+5EDtodJS2kGjW5vM2/f3X873e1Z3tyh7JcaAEcjU=";
+              rev = "v0.2.2";
+              hash = "sha256-2Q4WqPolSXe54giWX4T9FtDPoj3nSm9vViZza1cGjFo=";
             };
-            cargoHash = "sha256-853XHoTQjymZ52eo/NoKvZGEmA+1xr+7Yq5KbwrGKJ8=";
+            cargoHash = "sha256-njCeiFTaQ0NN5Jp2COOwq9HQhrIkykcjJz73CtzHvRo=";
             meta = {
               description = "A smarter cd command - zoxide without the z";
               homepage = "https://github.com/tenseleyFlow/gump";

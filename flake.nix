@@ -15,8 +15,8 @@
         # Shared source for gardesk suite (monorepo with submodules)
         gardesk-src = pkgs.fetchgit {
           url = "https://github.com/gardesk/gardesk";
-          rev = "42e398f3e2dc6a60ff3c67f946347c709999e9de";
-          hash = "sha256-pU2HB6WbVrIw9fSs8UxzcRzvLFEk/in8wg0L6n8b4/s=";
+          rev = "32a031fa2e7b5922b0ec02b3da500bc595384a7f";
+          hash = "sha256-brrASSCtytrs/W1ckC7mmZqUcKqyda+M2nHGHijxFhI=";
           fetchSubmodules = true;
           name = "gardesk-src";
         };
@@ -391,7 +391,7 @@
             version = "0.1.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/gar";
-            cargoHash = "sha256-yqNmtnNQLBEIhL4+zLpJymKXoH2sd3iGifjqbThxEOw=";
+            cargoHash = "sha256-wTAqYzQfZ+oQwAdQFFNQ4Ije6SgskJEMFEF9aLvUv48=";
 
             nativeBuildInputs = with pkgs; [ pkg-config makeWrapper ];
             buildInputs = with pkgs; [
@@ -458,7 +458,7 @@
             version = "0.1.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/garbar";
-            cargoHash = "sha256-Wic0NzJ9Zgsspy6xkQyjITg/MlabbRpqCgIYn2sx5K0=";
+            cargoHash = "sha256-rQD/5mGLnfPdS9cc9DXt5jx+f+AFSH9io4tXcHhxX0M=";
 
             nativeBuildInputs = with pkgs; [ pkg-config ];
             buildInputs = with pkgs; [
@@ -489,7 +489,7 @@
             version = "0.1.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/garbg";
-            cargoHash = "sha256-PqsmAJaBL1cUaiE5zytExSBtBbhA2kGbNhG4i+5Nkg8=";
+            cargoHash = "sha256-3g28p0zkYZhDYaf7LzufdRTOyc5Jy6/gs8UDZQpybAA=";
 
             # Use ffmpeg_7 (not ffmpeg-full/8.0) - avfft.h removed in FFmpeg 8.0
             nativeBuildInputs = with pkgs; [ pkg-config clang llvmPackages.libclang ];
@@ -548,7 +548,7 @@
             version = "0.1.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/garshot";
-            cargoHash = "sha256-cg8ACAkxRhKfklzHYLOgD44Wc88j5UaQ7qHLzYw+vW0=";
+            cargoHash = "sha256-xB0KamqR0ncT0OIL/tlyVkgG7OizmJy3AiJrzH6t1PU=";
 
             nativeBuildInputs = with pkgs; [ pkg-config ];
             buildInputs = with pkgs; [
@@ -592,7 +592,7 @@
             version = "0.1.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/garlock";
-            cargoHash = "sha256-x98QlMesEEItBq7gDHxuHEmVzz3pVUHqXXgCQNaoipw=";
+            cargoHash = "sha256-FMb6GTlDUQDeDfrw0ExM6ZKio7FpAJ5vz05d10PzLpE=";
 
             nativeBuildInputs = with pkgs; [ pkg-config clang llvmPackages.libclang ];
             buildInputs = with pkgs; [
@@ -649,7 +649,7 @@
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
               sourceRoot = "gardesk-src/garlaunch";
-              hash = "sha256-kSyQSAIynkWATdQX36pBBvl5Pd/NbxaSF/Msalp9Wao=";
+              hash = "sha256-99NnJs+9RUzMO8cUBT8LpWj8q+bK2bPfVxLZS20e4qo=";
             };
             cargoRoot = "garlaunch";
 
@@ -704,7 +704,7 @@
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
               sourceRoot = "gardesk-src/garclip";
-              hash = "sha256-sL0h8ektkvAQjbBohKG+YDjSCSHogyVT1q16jW3VJHI=";
+              hash = "sha256-KUZcxWonuWywpAcQJpPBVaYgA3uGT/lb3ruVE8nUIM8=";
             };
             cargoRoot = "garclip";
 
@@ -762,7 +762,7 @@
             version = "0.1.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/gardm";
-            cargoHash = "sha256-XvqGD6ybVa37/YJmwdcbixdWFMrwvLscxdqIy5ihplg=";
+            cargoHash = "sha256-73kMOp4jtUmMnqA2FDOFAZB9Km9iQabcfu4FcVzxhVs=";
 
             nativeBuildInputs = with pkgs; [ pkg-config clang llvmPackages.libclang ];
             buildInputs = with pkgs; [
@@ -849,6 +849,420 @@
             meta = {
               description = "Display manager with graphical greeter for the gar desktop suite";
               homepage = "https://github.com/gardesk/gardm";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # gartray: System tray with SNI/XEMBED support (needs full tree for gartk)
+          gartray = pkgs.stdenv.mkDerivation {
+            pname = "gartray";
+            version = "0.1.0";
+            src = gardesk-src;
+
+            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+              dbus
+            ];
+
+            cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+              inherit (pkgs.stdenv.hostPlatform) system;
+              src = gardesk-src;
+              sourceRoot = "gardesk-src/gartray";
+              hash = "sha256-45vfYhbmduS81EMBLu7iTzCm9/rRS+sSlN/9J13WiGE=";
+            };
+            cargoRoot = "gartray";
+
+            buildPhase = ''
+              cd gartray
+              cargo build --release --offline -p gartray -p gartrayctl
+            '';
+
+            installPhase = ''
+              mkdir -p $out/bin
+              cp target/release/gartray $out/bin/
+              cp target/release/gartrayctl $out/bin/
+            '';
+
+            meta = {
+              description = "System tray with SNI/XEMBED support for the gar desktop suite";
+              homepage = "https://github.com/gardesk/gartray";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # garchomp: X11 compositor with GPU rendering
+          garchomp = pkgs.rustPlatform.buildRustPackage {
+            pname = "garchomp";
+            version = "0.1.0";
+            src = gardesk-src;
+            sourceRoot = "gardesk-src/garchomp";
+            cargoHash = "sha256-30gKhImp0mVUzz1CUxv5g7dDsJC0+OQ50rZAn4C137c=";
+
+            nativeBuildInputs = with pkgs; [ pkg-config ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              xorg.libXcomposite
+              xorg.libXdamage
+              xorg.libXfixes
+              xorg.libXext
+              libGL
+              libdrm
+            ];
+
+            cargoBuildFlags = [ "-p" "garchomp" "-p" "garchompctl" ];
+
+            postInstall = ''
+              # Install systemd user service
+              mkdir -p $out/lib/systemd/user
+              cat > $out/lib/systemd/user/garchomp.service << EOF
+              [Unit]
+              Description=garchomp X11 compositor
+              Documentation=https://gar.dev
+              PartOf=graphical-session.target
+              Conflicts=picom.service
+
+              [Service]
+              Type=simple
+              ExecStart=$out/bin/garchomp daemon
+              Restart=on-failure
+
+              [Install]
+              WantedBy=graphical-session.target
+              EOF
+            '';
+
+            meta = {
+              description = "X11 compositor with GPU rendering for the gar desktop suite";
+              homepage = "https://github.com/gardesk/garchomp";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # garfield: File manager with dual-pane interface (needs full tree for gartk)
+          garfield = pkgs.stdenv.mkDerivation {
+            pname = "garfield";
+            version = "0.2.1";
+            src = gardesk-src;
+
+            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+            ];
+
+            cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+              inherit (pkgs.stdenv.hostPlatform) system;
+              src = gardesk-src;
+              sourceRoot = "gardesk-src/garfield";
+              hash = "sha256-fBZ6Aok4R3aIyB4UZLZXKjFtCOoaMfo1ONy2ecpwYYM=";
+            };
+            cargoRoot = "garfield";
+
+            buildPhase = ''
+              cd garfield
+              cargo build --release --offline -p garfield -p garfieldctl
+            '';
+
+            installPhase = ''
+              mkdir -p $out/bin $out/share/applications
+              cp target/release/garfield $out/bin/
+              cp target/release/garfieldctl $out/bin/
+              cat > $out/share/applications/garfield.desktop << EOF
+              [Desktop Entry]
+              Name=Garfield
+              Comment=File manager with dual-pane interface
+              Exec=$out/bin/garfield
+              Terminal=false
+              Type=Application
+              Categories=System;FileTools;FileManager;
+              EOF
+            '';
+
+            meta = {
+              description = "File manager with dual-pane interface for the gar desktop suite";
+              homepage = "https://github.com/gardesk/garfield";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # garterm: GPU-accelerated terminal emulator (needs full tree for gartk)
+          garterm = pkgs.stdenv.mkDerivation {
+            pname = "garterm";
+            version = "0.1.2";
+            src = gardesk-src;
+
+            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+              libGL
+            ];
+
+            cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+              inherit (pkgs.stdenv.hostPlatform) system;
+              src = gardesk-src;
+              sourceRoot = "gardesk-src/garterm";
+              hash = "sha256-WHpAsQyLg8n84NRX8PZdpVxm1RTuuq501WoNF4hXTbU=";
+            };
+            cargoRoot = "garterm";
+
+            buildPhase = ''
+              cd garterm
+              cargo build --release --offline -p garterm -p gartermctl
+            '';
+
+            installPhase = ''
+              mkdir -p $out/bin $out/share/applications
+              cp target/release/garterm $out/bin/
+              cp target/release/gartermctl $out/bin/
+              cat > $out/share/applications/garterm.desktop << EOF
+              [Desktop Entry]
+              Name=Garterm
+              Comment=GPU-accelerated terminal emulator
+              Exec=$out/bin/garterm
+              Terminal=false
+              Type=Application
+              Categories=System;TerminalEmulator;
+              EOF
+            '';
+
+            meta = {
+              description = "GPU-accelerated terminal emulator for the gar desktop suite";
+              homepage = "https://github.com/gardesk/garterm";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # garnotify: Desktop notification daemon
+          garnotify = pkgs.rustPlatform.buildRustPackage {
+            pname = "garnotify";
+            version = "0.1.1";
+            src = gardesk-src;
+            sourceRoot = "gardesk-src/garnotify";
+            cargoHash = "sha256-iNh+EzKhqp7/egFedYQQa6TZK8e+PlpZRy1/gQ+d/MQ=";
+
+            nativeBuildInputs = with pkgs; [ pkg-config ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+              dbus
+            ];
+
+            cargoBuildFlags = [ "-p" "garnotify" "-p" "garnotifyctl" ];
+
+            meta = {
+              description = "Desktop notification daemon for the gar desktop suite";
+              homepage = "https://github.com/gardesk/garnotify";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # gargears: Settings and configuration application (needs full tree for gartk)
+          gargears = pkgs.stdenv.mkDerivation {
+            pname = "gargears";
+            version = "0.1.0";
+            src = gardesk-src;
+
+            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+            ];
+
+            cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+              inherit (pkgs.stdenv.hostPlatform) system;
+              src = gardesk-src;
+              sourceRoot = "gardesk-src/gargears";
+              hash = "sha256-iGa0TeLUntIKuRKndShwY/UjwXHzMbMLhrAoPgG78vQ=";
+            };
+            cargoRoot = "gargears";
+
+            buildPhase = ''
+              cd gargears
+              cargo build --release --offline -p gargears -p gargearsctl
+            '';
+
+            installPhase = ''
+              mkdir -p $out/bin $out/share/applications
+              cp target/release/gargears $out/bin/
+              cp target/release/gargearsctl $out/bin/
+              cat > $out/share/applications/gargears.desktop << EOF
+              [Desktop Entry]
+              Name=Gargears
+              Comment=Settings and configuration
+              Exec=$out/bin/gargears
+              Terminal=false
+              Type=Application
+              Categories=Settings;DesktopSettings;
+              EOF
+            '';
+
+            meta = {
+              description = "Settings and configuration application for the gar desktop suite";
+              homepage = "https://github.com/gardesk/gargears";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # gartop: System monitor with resource graphs (needs full tree for gartk)
+          gartop = pkgs.stdenv.mkDerivation {
+            pname = "gartop";
+            version = "0.1.0";
+            src = gardesk-src;
+
+            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+            ];
+
+            cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+              inherit (pkgs.stdenv.hostPlatform) system;
+              src = gardesk-src;
+              sourceRoot = "gardesk-src/gartop";
+              hash = "sha256-bnJhdubk5ic6IKGqCF+4DNKbtlmK3lmaykUvJnF/bL8=";
+            };
+            cargoRoot = "gartop";
+
+            buildPhase = ''
+              cd gartop
+              cargo build --release --offline -p gartop -p gartopctl
+            '';
+
+            installPhase = ''
+              mkdir -p $out/bin $out/share/applications $out/lib/systemd/user
+              cp target/release/gartop $out/bin/
+              cp target/release/gartopctl $out/bin/
+              cat > $out/share/applications/gartop.desktop << EOF
+              [Desktop Entry]
+              Name=Gartop
+              Comment=System monitor
+              Exec=$out/bin/gartop
+              Terminal=false
+              Type=Application
+              Categories=System;Monitor;
+              EOF
+              cat > $out/lib/systemd/user/gartop.service << EOF
+              [Unit]
+              Description=gartop system monitor
+              Documentation=https://gar.dev
+              PartOf=graphical-session.target
+
+              [Service]
+              Type=simple
+              ExecStart=$out/bin/gartop daemon
+              Restart=on-failure
+
+              [Install]
+              WantedBy=graphical-session.target
+              EOF
+            '';
+
+            meta = {
+              description = "System monitor with resource graphs for the gar desktop suite";
+              homepage = "https://github.com/gardesk/gartop";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # garview: Document viewer supporting PDF, images, and comics (needs full tree for gartk)
+          garview = pkgs.stdenv.mkDerivation {
+            pname = "garview";
+            version = "0.3.1";
+            src = gardesk-src;
+
+            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
+            buildInputs = with pkgs; [
+              xorg.libxcb
+              xorg.libX11
+              xorg.libXrandr
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+              poppler
+            ];
+
+            cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+              inherit (pkgs.stdenv.hostPlatform) system;
+              src = gardesk-src;
+              sourceRoot = "gardesk-src/garview";
+              hash = "sha256-+52vE/uT6JOtWR6f4ZGIm4fiw3BBuVzFULa8BVRTy2s=";
+            };
+            cargoRoot = "garview";
+
+            buildPhase = ''
+              cd garview
+              cargo build --release --offline -p garview -p garviewctl
+            '';
+
+            installPhase = ''
+              mkdir -p $out/bin $out/share/applications
+              cp target/release/garview $out/bin/
+              cp target/release/garviewctl $out/bin/
+              cat > $out/share/applications/garview.desktop << EOF
+              [Desktop Entry]
+              Name=Garview
+              Comment=Document viewer
+              Exec=$out/bin/garview %U
+              Terminal=false
+              Type=Application
+              MimeType=application/pdf;image/png;image/jpeg;image/gif;
+              Categories=Graphics;Viewer;
+              EOF
+            '';
+
+            meta = {
+              description = "Document viewer supporting PDF, images, and comics for the gar desktop suite";
+              homepage = "https://github.com/gardesk/garview";
               license = pkgs.lib.licenses.mit;
             };
           };

@@ -966,6 +966,7 @@
               harfbuzz
               freetype
               fontconfig
+              poppler
             ];
 
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {

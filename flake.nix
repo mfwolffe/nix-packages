@@ -438,6 +438,10 @@
               Wants=graphical-session-pre.target
               After=graphical-session-pre.target
               EOF
+
+              # Install default config
+              mkdir -p $out/share/gar/config
+              install -Dm644 ../config/gar/init.lua $out/share/gar/config/init.lua
             '';
 
             passthru = {
@@ -475,6 +479,11 @@
             ];
 
             cargoBuildFlags = [ "-p" "garbar" "-p" "garbarctl" ];
+
+            postInstall = ''
+              mkdir -p $out/share/garbar/config
+              install -Dm644 ../config/garbar/config.toml $out/share/garbar/config/config.toml
+            '';
 
             meta = {
               description = "Status bar with Cairo/Pango rendering for the gar desktop suite";
@@ -533,6 +542,10 @@
               [Install]
               WantedBy=graphical-session.target
               EOF
+
+              # Install default config
+              mkdir -p $out/share/garbg/config
+              install -Dm644 ../config/garbg/config.toml $out/share/garbg/config/config.toml
             '';
 
             meta = {
@@ -577,6 +590,10 @@
               Type=Application
               Categories=Utility;Graphics;
               EOF
+
+              # Install default config
+              mkdir -p $out/share/garshot/config
+              install -Dm644 ../config/garshot/config.toml $out/share/garshot/config/config.toml
             '';
 
             meta = {
@@ -617,6 +634,11 @@
                 $(< ${pkgs.stdenv.cc}/nix-support/libc-cflags) \
                 $(< ${pkgs.stdenv.cc}/nix-support/cc-cflags) \
                 ${lib.optionalString pkgs.stdenv.cc.isGNU "-isystem ${pkgs.stdenv.cc.cc}/include/c++/${lib.getVersion pkgs.stdenv.cc.cc} -isystem ${pkgs.stdenv.cc.cc}/include/c++/${lib.getVersion pkgs.stdenv.cc.cc}/${pkgs.stdenv.hostPlatform.config} -idirafter ${pkgs.stdenv.cc.cc}/lib/gcc/${pkgs.stdenv.hostPlatform.config}/${lib.getVersion pkgs.stdenv.cc.cc}/include"}"
+            '';
+
+            postInstall = ''
+              mkdir -p $out/share/garlock/config
+              install -Dm644 ../config/garlock/config.toml $out/share/garlock/config/config.toml
             '';
 
             meta = {
@@ -890,6 +912,10 @@
               mkdir -p $out/bin
               cp target/release/gartray $out/bin/
               cp target/release/gartrayctl $out/bin/
+
+              # Install default config
+              mkdir -p $out/share/gartray/config
+              install -Dm644 ../config/gartray/config.toml $out/share/gartray/config/config.toml
             '';
 
             meta = {
@@ -940,6 +966,10 @@
               [Install]
               WantedBy=graphical-session.target
               EOF
+
+              # Install default config
+              mkdir -p $out/share/garchomp/config
+              install -Dm644 ../config/garchomp/init.lua $out/share/garchomp/config/init.lua
             '';
 
             meta = {
@@ -1050,6 +1080,10 @@
               Type=Application
               Categories=System;TerminalEmulator;
               EOF
+
+              # Install default config
+              mkdir -p $out/share/garterm/config
+              install -Dm644 ../config/garterm/config.toml $out/share/garterm/config/config.toml
             '';
 
             meta = {
@@ -1082,6 +1116,11 @@
             ];
 
             cargoBuildFlags = [ "-p" "garnotify" "-p" "garnotifyctl" ];
+
+            postInstall = ''
+              mkdir -p $out/share/garnotify/config
+              install -Dm644 ../config/garnotify/config.toml $out/share/garnotify/config/config.toml
+            '';
 
             meta = {
               description = "Desktop notification daemon for the gar desktop suite";

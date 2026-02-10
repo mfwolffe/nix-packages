@@ -15,8 +15,8 @@
         # Shared source for gardesk suite (monorepo with submodules)
         gardesk-src = pkgs.fetchgit {
           url = "https://github.com/gardesk/gardesk";
-          rev = "3b3d65a666c3cdbf291bf454c40a17c109912cac";
-          hash = "sha256-ukvvgzvfWfjfydrb3lWHT1WqeaV6Y5weNR65cXSbLAo=";
+          rev = "6acdba869471e8b91a282c335e860a36cdaad153";
+          hash = "sha256-Cf7s35tY5e6iwC4tPxs2pU2wBMqeguYyn9a5eYwwWjA=";
           fetchSubmodules = true;
           name = "gardesk-src";
         };
@@ -933,7 +933,7 @@
             sourceRoot = "gardesk-src/garchomp";
             cargoHash = "sha256-30gKhImp0mVUzz1CUxv5g7dDsJC0+OQ50rZAn4C137c=";
 
-            nativeBuildInputs = with pkgs; [ pkg-config ];
+            nativeBuildInputs = with pkgs; [ pkg-config makeWrapper ];
             buildInputs = with pkgs; [
               xorg.libxcb
               xorg.libX11
@@ -943,12 +943,23 @@
               xorg.libXfixes
               xorg.libXext
               libGL
+              libglvnd
+              vulkan-loader
               libdrm
             ];
 
             cargoBuildFlags = [ "-p" "garchomp" "-p" "garchompctl" ];
 
             postInstall = ''
+              # Wrap with GPU library paths for wgpu dlopen (libEGL, libvulkan)
+              wrapProgram $out/bin/garchomp \
+                --prefix LD_LIBRARY_PATH : ${
+                  lib.makeLibraryPath [
+                    pkgs.libglvnd
+                    pkgs.vulkan-loader
+                  ]
+                }:/run/opengl-driver/lib
+
               # Install systemd user service
               mkdir -p $out/lib/systemd/user
               cat > $out/lib/systemd/user/garchomp.service << EOF
@@ -1040,7 +1051,7 @@
             version = "0.1.2";
             src = gardesk-src;
 
-            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
+            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc makeWrapper ];
             buildInputs = with pkgs; [
               xorg.libxcb
               xorg.libX11
@@ -1052,6 +1063,8 @@
               freetype
               fontconfig
               libGL
+              libglvnd
+              vulkan-loader
             ];
 
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
@@ -1071,6 +1084,16 @@
               mkdir -p $out/bin $out/share/applications
               cp target/release/garterm $out/bin/
               cp target/release/gartermctl $out/bin/
+
+              # Wrap with GPU library paths for wgpu dlopen (libEGL, libvulkan)
+              wrapProgram $out/bin/garterm \
+                --prefix LD_LIBRARY_PATH : ${
+                  lib.makeLibraryPath [
+                    pkgs.libglvnd
+                    pkgs.vulkan-loader
+                  ]
+                }:/run/opengl-driver/lib
+
               cat > $out/share/applications/garterm.desktop << EOF
               [Desktop Entry]
               Name=Garterm

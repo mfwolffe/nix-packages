@@ -15,8 +15,8 @@
         # Shared source for gardesk suite (monorepo with submodules)
         gardesk-src = pkgs.fetchgit {
           url = "https://github.com/gardesk/gardesk";
-          rev = "6acdba869471e8b91a282c335e860a36cdaad153";
-          hash = "sha256-Cf7s35tY5e6iwC4tPxs2pU2wBMqeguYyn9a5eYwwWjA=";
+          rev = "795705338d7295a854102d4e1d5a9fcfd33b22d7";
+          hash = "sha256-dpscWAvQC/fOfwFxHFQeHeZ3eCcseaJVhVB5mapII34=";
           fetchSubmodules = true;
           name = "gardesk-src";
         };
@@ -495,7 +495,7 @@
           # garbg: Wallpaper daemon with animation support
           garbg = pkgs.rustPlatform.buildRustPackage {
             pname = "garbg";
-            version = "0.1.0";
+            version = "0.3.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/garbg";
             cargoHash = "sha256-3g28p0zkYZhDYaf7LzufdRTOyc5Jy6/gs8UDZQpybAA=";

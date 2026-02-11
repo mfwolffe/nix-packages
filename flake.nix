@@ -462,7 +462,7 @@
             version = "0.1.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/garbar";
-            cargoHash = "sha256-rQD/5mGLnfPdS9cc9DXt5jx+f+AFSH9io4tXcHhxX0M=";
+            cargoHash = "sha256-Wic0NzJ9Zgsspy6xkQyjITg/MlabbRpqCgIYn2sx5K0=";
 
             nativeBuildInputs = with pkgs; [ pkg-config ];
             buildInputs = with pkgs; [
@@ -561,7 +561,7 @@
             version = "0.1.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/garshot";
-            cargoHash = "sha256-xB0KamqR0ncT0OIL/tlyVkgG7OizmJy3AiJrzH6t1PU=";
+            cargoHash = "sha256-cg8ACAkxRhKfklzHYLOgD44Wc88j5UaQ7qHLzYw+vW0=";
 
             nativeBuildInputs = with pkgs; [ pkg-config ];
             buildInputs = with pkgs; [
@@ -609,7 +609,7 @@
             version = "0.1.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/garlock";
-            cargoHash = "sha256-FMb6GTlDUQDeDfrw0ExM6ZKio7FpAJ5vz05d10PzLpE=";
+            cargoHash = "sha256-x98QlMesEEItBq7gDHxuHEmVzz3pVUHqXXgCQNaoipw=";
 
             nativeBuildInputs = with pkgs; [ pkg-config clang llvmPackages.libclang ];
             buildInputs = with pkgs; [
@@ -671,7 +671,7 @@
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
               sourceRoot = "gardesk-src/garlaunch";
-              hash = "sha256-99NnJs+9RUzMO8cUBT8LpWj8q+bK2bPfVxLZS20e4qo=";
+              hash = "sha256-kSyQSAIynkWATdQX36pBBvl5Pd/NbxaSF/Msalp9Wao=";
             };
             cargoRoot = "garlaunch";
 
@@ -726,7 +726,7 @@
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
               sourceRoot = "gardesk-src/garclip";
-              hash = "sha256-KUZcxWonuWywpAcQJpPBVaYgA3uGT/lb3ruVE8nUIM8=";
+              hash = "sha256-sL0h8ektkvAQjbBohKG+YDjSCSHogyVT1q16jW3VJHI=";
             };
             cargoRoot = "garclip";
 

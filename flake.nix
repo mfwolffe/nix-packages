@@ -4,13 +4,9 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    gardesk = {
-      url = "path:/home/mfwolffe/GithubOrgs/gardesk";
-      flake = false;
-    };
   };
 
-  outputs = { self, nixpkgs, flake-utils, gardesk }:
+  outputs = { self, nixpkgs, flake-utils }:
     let
       codexPkg = pkgs:
         pkgs.stdenv.mkDerivation {
@@ -44,10 +40,14 @@
         pkgs = import nixpkgs { inherit system; };
         lib = pkgs.lib;
 
-        # Shared source for gardesk suite (monorepo with submodules).
-        # Use the local working tree snapshot so private submodules do not need
-        # to be fetched over SSH by the Nix daemon.
-        gardesk-src = gardesk;
+        # Shared source for gardesk suite (monorepo with submodules)
+        gardesk-src = pkgs.fetchgit {
+          url = "https://github.com/gardesk/gardesk";
+          rev = "cfc12c68afe84b42edeac0a7088967ac95b83d9b";
+          hash = "sha256-QSVQmW4RF+5I94eYpv2weJ4OlC6srMIlQfclX9v7stc=";
+          fetchSubmodules = true;
+          name = "gardesk";
+        };
 
         # Helper for Rust packages
         mkRustPackage = { pname, version, src, cargoHash ? null, cargoLock ? null
@@ -420,7 +420,7 @@
             pname = "gar";
             version = "0.1.0";
             src = gardesk-src;
-            sourceRoot = "gar";
+            sourceRoot = "gardesk/gar";
             cargoHash = "sha256-wTAqYzQfZ+oQwAdQFFNQ4Ije6SgskJEMFEF9aLvUv48=";
 
             nativeBuildInputs = with pkgs; [ pkg-config makeWrapper ];
@@ -491,7 +491,7 @@
             pname = "garbar";
             version = "0.1.0";
             src = gardesk-src;
-            sourceRoot = "garbar";
+            sourceRoot = "gardesk/garbar";
             cargoHash = "sha256-rQD/5mGLnfPdS9cc9DXt5jx+f+AFSH9io4tXcHhxX0M=";
 
             nativeBuildInputs = with pkgs; [ pkg-config ];
@@ -527,7 +527,7 @@
             pname = "garbg";
             version = "0.3.0";
             src = gardesk-src;
-            sourceRoot = "garbg";
+            sourceRoot = "gardesk/garbg";
             cargoHash = "sha256-3g28p0zkYZhDYaf7LzufdRTOyc5Jy6/gs8UDZQpybAA=";
 
             # Use ffmpeg_7 (not ffmpeg-full/8.0) - avfft.h removed in FFmpeg 8.0
@@ -590,7 +590,7 @@
             pname = "garshot";
             version = "0.1.0";
             src = gardesk-src;
-            sourceRoot = "garshot";
+            sourceRoot = "gardesk/garshot";
             cargoHash = "sha256-cg8ACAkxRhKfklzHYLOgD44Wc88j5UaQ7qHLzYw+vW0=";
 
             nativeBuildInputs = with pkgs; [ pkg-config ];
@@ -638,7 +638,7 @@
             pname = "garlock";
             version = "0.3.2";
             src = gardesk-src;
-            sourceRoot = "garlock";
+            sourceRoot = "gardesk/garlock";
             cargoHash = "sha256-8EU9qYyLFj297nm8ZXYC8FX7fmHUY5mbelspEozpLgM=";
 
             nativeBuildInputs = with pkgs; [ pkg-config clang llvmPackages.libclang ];
@@ -700,7 +700,7 @@
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
-              sourceRoot = "garlaunch";
+              sourceRoot = "gardesk/garlaunch";
               hash = "sha256-kSyQSAIynkWATdQX36pBBvl5Pd/NbxaSF/Msalp9Wao=";
             };
             cargoRoot = "garlaunch";
@@ -755,7 +755,7 @@
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
-              sourceRoot = "garclip";
+              sourceRoot = "gardesk/garclip";
               hash = "sha256-sL0h8ektkvAQjbBohKG+YDjSCSHogyVT1q16jW3VJHI=";
             };
             cargoRoot = "garclip";
@@ -813,7 +813,7 @@
             pname = "gardm";
             version = "0.1.0";
             src = gardesk-src;
-            sourceRoot = "gardm";
+            sourceRoot = "gardesk/gardm";
             cargoHash = "sha256-73kMOp4jtUmMnqA2FDOFAZB9Km9iQabcfu4FcVzxhVs=";
 
             nativeBuildInputs = with pkgs; [ pkg-config clang llvmPackages.libclang ];
@@ -928,7 +928,7 @@
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
-              sourceRoot = "gartray";
+              sourceRoot = "gardesk/gartray";
               hash = "sha256-45vfYhbmduS81EMBLu7iTzCm9/rRS+sSlN/9J13WiGE=";
             };
             cargoRoot = "gartray";
@@ -960,7 +960,7 @@
             pname = "garchomp";
             version = "0.1.0";
             src = gardesk-src;
-            sourceRoot = "garchomp";
+            sourceRoot = "gardesk/garchomp";
             cargoHash = "sha256-30gKhImp0mVUzz1CUxv5g7dDsJC0+OQ50rZAn4C137c=";
 
             nativeBuildInputs = with pkgs; [ pkg-config makeWrapper ];
@@ -1043,7 +1043,7 @@
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
-              sourceRoot = "garfield";
+              sourceRoot = "gardesk/garfield";
               hash = "sha256-fBZ6Aok4R3aIyB4UZLZXKjFtCOoaMfo1ONy2ecpwYYM=";
             };
             cargoRoot = "garfield";
@@ -1100,7 +1100,7 @@
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
-              sourceRoot = "garterm";
+              sourceRoot = "gardesk/garterm";
               hash = "sha256-WHpAsQyLg8n84NRX8PZdpVxm1RTuuq501WoNF4hXTbU=";
             };
             cargoRoot = "garterm";
@@ -1151,7 +1151,7 @@
             pname = "garnotify";
             version = "0.1.1";
             src = gardesk-src;
-            sourceRoot = "garnotify";
+            sourceRoot = "gardesk/garnotify";
             cargoHash = "sha256-iNh+EzKhqp7/egFedYQQa6TZK8e+PlpZRy1/gQ+d/MQ=";
 
             nativeBuildInputs = with pkgs; [ pkg-config ];
@@ -1204,7 +1204,7 @@
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
-              sourceRoot = "gargears";
+              sourceRoot = "gardesk/gargears";
               hash = "sha256-iGa0TeLUntIKuRKndShwY/UjwXHzMbMLhrAoPgG78vQ=";
             };
             cargoRoot = "gargears";
@@ -1258,7 +1258,7 @@
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
-              sourceRoot = "gartop";
+              sourceRoot = "gardesk/gartop";
               hash = "sha256-bnJhdubk5ic6IKGqCF+4DNKbtlmK3lmaykUvJnF/bL8=";
             };
             cargoRoot = "gartop";
@@ -1326,7 +1326,7 @@
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
-              sourceRoot = "garcalc";
+              sourceRoot = "gardesk/garcalc";
               hash = "sha256-xUWyyx2RhHmHAAwSIpVfHq3Eu7Ud/k869TuogQ60c/M=";
             };
             cargoRoot = "garcalc";
@@ -1386,7 +1386,7 @@
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
-              sourceRoot = "garview";
+              sourceRoot = "gardesk/garview";
               hash = "sha256-+52vE/uT6JOtWR6f4ZGIm4fiw3BBuVzFULa8BVRTy2s=";
             };
             cargoRoot = "garview";

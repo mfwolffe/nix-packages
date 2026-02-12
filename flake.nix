@@ -40,13 +40,14 @@
         pkgs = import nixpkgs { inherit system; };
         lib = pkgs.lib;
 
-        # Shared source for gardesk suite (monorepo with submodules)
-        gardesk-src = pkgs.fetchgit {
-          url = "https://github.com/gardesk/gardesk";
-          rev = "2d94f131564ff87518b0b7b5f003664027cab82c";
-          hash = "sha256-RPrksp7JHj9hhrhlkOna8uklnTWlhCbXvl6yCR53QTA=";
-          fetchSubmodules = true;
-          name = "gardesk";
+        # Shared source for gardesk suite (monorepo with submodules).
+        # Uses a pinned local Git revision so private submodules are available
+        # during evaluation/build without HTTPS credential prompts.
+        gardesk-src = builtins.fetchGit {
+          url = "/home/mfwolffe/GithubOrgs/gardesk";
+          rev = "8cc9c76df224638c4923d790fe59fba7a4939511";
+          narHash = "sha256-Gnq+Y9GkUW/SncLqcnoG8E4nkl1QZmcV/NYIjZcbdkU=";
+          submodules = true;
         };
 
         # Helper for Rust packages
@@ -1300,6 +1301,65 @@
             meta = {
               description = "System monitor with resource graphs for the gar desktop suite";
               homepage = "https://github.com/gardesk/gartop";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # garcalc: TI-Nspire-like calculator suite (needs full tree for gartk)
+          garcalc = pkgs.stdenv.mkDerivation {
+            pname = "garcalc";
+            version = "0.1.0";
+            src = gardesk-src;
+
+            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
+            buildInputs = with pkgs; [
+              libxcb
+              libx11
+              libxrandr
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+            ];
+
+            cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+              inherit (pkgs.stdenv.hostPlatform) system;
+              src = gardesk-src;
+              sourceRoot = "gardesk/garcalc";
+              hash = "sha256-xUWyyx2RhHmHAAwSIpVfHq3Eu7Ud/k869TuogQ60c/M=";
+            };
+            cargoRoot = "garcalc";
+
+            buildPhase = ''
+              cd garcalc
+              cargo build --release --offline --workspace -p garcalc -p garcalcctl -p garcas
+            '';
+
+            installPhase = ''
+              mkdir -p $out/bin $out/share/applications
+              cp target/release/garcalc $out/bin/
+              cp target/release/garcalcctl $out/bin/
+              cp target/release/garcas $out/bin/
+              cat > $out/share/applications/garcalc.desktop << EOF
+              [Desktop Entry]
+              Name=Garcalc
+              Comment=TI-Nspire-like calculator for the gar desktop suite
+              Exec=$out/bin/garcalc
+              Terminal=false
+              Type=Application
+              Categories=Education;Science;Math;Calculator;
+              EOF
+
+              # Install default config
+              mkdir -p $out/share/garcalc/config
+              install -Dm644 ../config/garcalc/config.toml $out/share/garcalc/config/config.toml
+            '';
+
+            meta = {
+              description = "TI-Nspire-like calculator suite with CAS and graphing support";
+              homepage = "https://github.com/gardesk/garcalc";
               license = pkgs.lib.licenses.mit;
             };
           };

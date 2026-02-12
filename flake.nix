@@ -7,6 +7,34 @@
   };
 
   outputs = { self, nixpkgs, flake-utils }:
+    let
+      codexPkg = pkgs:
+        pkgs.stdenv.mkDerivation {
+          pname = "codex";
+          version = "0.98.0";
+          src = pkgs.fetchurl {
+            url =
+              "https://github.com/openai/codex/releases/download/rust-v0.98.0/codex-x86_64-unknown-linux-musl.tar.gz";
+            hash = "sha256-wJ7m7G8e71iCS96hTvsQre5U4OPFzL+k4/862bDd3IM=";
+          };
+          dontBuild = true;
+          dontUnpack = true;
+          installPhase = ''
+            runHook preInstall
+            mkdir -p $out/bin
+            tar -xzf $src -C $out/bin
+            mv $out/bin/codex-x86_64-unknown-linux-musl $out/bin/codex
+            chmod 0755 $out/bin/codex
+            runHook postInstall
+          '';
+          meta = {
+            description = "OpenAI Codex CLI";
+            homepage = "https://github.com/openai/codex";
+            license = pkgs.lib.licenses.asl20;
+            mainProgram = "codex";
+          };
+        };
+    in
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
@@ -128,6 +156,8 @@
 
       in {
         packages = {
+          codex = codexPkg pkgs;
+
           # ============ RUST PACKAGES ============
 
           fackr = mkRustPackage {
@@ -204,10 +234,10 @@
               wayland
               libxkbcommon
               libGL
-              xorg.libX11
-              xorg.libXcursor
-              xorg.libXi
-              xorg.libXrandr
+              libx11
+              libxcursor
+              libxi
+              libxrandr
             ];
             nativeBuildInputs = with pkgs; [ makeWrapper ];
             postInstall = ''
@@ -395,9 +425,9 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config makeWrapper ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
+              libxcb
+              libx11
+              libxrandr
             ];
 
             cargoBuildFlags = [ "-p" "gar" "-p" "garctl" ];
@@ -466,10 +496,10 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
-              xorg.libXfixes
+              libxcb
+              libx11
+              libxrandr
+              libxfixes
               cairo
               pango
               glib
@@ -503,9 +533,9 @@
             # Use ffmpeg_7 (not ffmpeg-full/8.0) - avfft.h removed in FFmpeg 8.0
             nativeBuildInputs = with pkgs; [ pkg-config clang llvmPackages.libclang ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
+              libxcb
+              libx11
+              libxrandr
               openssl
               ffmpeg_7
             ];
@@ -565,10 +595,10 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
-              xorg.libXfixes
+              libxcb
+              libx11
+              libxrandr
+              libxfixes
               cairo
               pango
               glib
@@ -613,9 +643,9 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config clang llvmPackages.libclang ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
+              libxcb
+              libx11
+              libxrandr
               cairo
               pango
               glib
@@ -656,9 +686,9 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
+              libxcb
+              libx11
+              libxrandr
               cairo
               pango
               glib
@@ -710,10 +740,10 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
-              xorg.libXfixes
+              libxcb
+              libx11
+              libxrandr
+              libxfixes
               cairo
               pango
               glib
@@ -788,10 +818,10 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config clang llvmPackages.libclang ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
-              xorg.xorgserver
+              libxcb
+              libx11
+              libxrandr
+              pkgs."xorg-server"
               cairo
               pango
               glib
@@ -804,7 +834,7 @@
             # Patch hardcoded paths for NixOS
             postPatch = ''
               substituteInPlace gardmd/src/x11.rs \
-                --replace-fail '"/usr/bin/Xorg"' '"${pkgs.xorg.xorgserver}/bin/Xorg"'
+                --replace-fail '"/usr/bin/Xorg"' '"${pkgs."xorg-server"}/bin/Xorg"'
               # Add modulepath to include nvidia driver from system path
               substituteInPlace gardmd/src/x11.rs \
                 --replace-fail '.arg("-nolisten")' '.arg("-modulepath").arg("/run/current-system/sw/lib/xorg/modules").arg("-nolisten")'
@@ -883,9 +913,9 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
+              libxcb
+              libx11
+              libxrandr
               cairo
               pango
               glib
@@ -935,13 +965,13 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config makeWrapper ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
-              xorg.libXcomposite
-              xorg.libXdamage
-              xorg.libXfixes
-              xorg.libXext
+              libxcb
+              libx11
+              libxrandr
+              libxcomposite
+              libxdamage
+              libxfixes
+              libxext
               libGL
               libglvnd
               vulkan-loader
@@ -998,9 +1028,9 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
+              libxcb
+              libx11
+              libxrandr
               cairo
               pango
               glib
@@ -1053,9 +1083,9 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc makeWrapper ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
+              libxcb
+              libx11
+              libxrandr
               cairo
               pango
               glib
@@ -1126,9 +1156,9 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
+              libxcb
+              libx11
+              libxrandr
               cairo
               pango
               glib
@@ -1160,9 +1190,9 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
+              libxcb
+              libx11
+              libxrandr
               cairo
               pango
               glib
@@ -1214,9 +1244,9 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
+              libxcb
+              libx11
+              libxrandr
               cairo
               pango
               glib
@@ -1282,9 +1312,9 @@
 
             nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
             buildInputs = with pkgs; [
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXrandr
+              libxcb
+              libx11
+              libxrandr
               cairo
               pango
               glib
@@ -1973,6 +2003,10 @@
         # Overlay for easy integration
         overlays.default = final: prev: self.packages.${system};
       }) // {
+        overlays.default = final: prev: {
+          codex = codexPkg final;
+        };
+
         # NixOS module for easy installation
         nixosModules.default = { config, lib, pkgs, ... }: {
           options.programs.mfwolffe-packages = {

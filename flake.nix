@@ -591,7 +591,7 @@
             version = "0.1.0";
             src = gardesk-src;
             sourceRoot = "gardesk/garshot";
-            cargoHash = "sha256-cg8ACAkxRhKfklzHYLOgD44Wc88j5UaQ7qHLzYw+vW0=";
+            cargoHash = "sha256-xB0KamqR0ncT0OIL/tlyVkgG7OizmJy3AiJrzH6t1PU=";
 
             nativeBuildInputs = with pkgs; [ pkg-config ];
             buildInputs = with pkgs; [

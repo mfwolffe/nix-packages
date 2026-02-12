@@ -18,6 +18,19 @@
         "type": "github"
       }
     },
+    "gardesk": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1770870803,
+        "narHash": "sha256-/B1UbqYPA/CVAgAGNGHP0GVIB/1YKHGZfuNX4j1LVUc=",
+        "path": "/home/mfwolffe/GithubOrgs/gardesk",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/mfwolffe/GithubOrgs/gardesk",
+        "type": "path"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1770562336,
@@ -37,6 +50,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+        "gardesk": "gardesk",
         "nixpkgs": "nixpkgs"
       }
     },

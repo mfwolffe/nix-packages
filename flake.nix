@@ -4,9 +4,13 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    gardesk = {
+      url = "path:/home/mfwolffe/GithubOrgs/gardesk";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils, gardesk }:
     let
       codexPkg = pkgs:
         pkgs.stdenv.mkDerivation {
@@ -41,14 +45,9 @@
         lib = pkgs.lib;
 
         # Shared source for gardesk suite (monorepo with submodules).
-        # Uses a pinned local Git revision so private submodules are available
-        # during evaluation/build without HTTPS credential prompts.
-        gardesk-src = builtins.fetchGit {
-          url = "/home/mfwolffe/GithubOrgs/gardesk";
-          rev = "8cc9c76df224638c4923d790fe59fba7a4939511";
-          narHash = "sha256-Gnq+Y9GkUW/SncLqcnoG8E4nkl1QZmcV/NYIjZcbdkU=";
-          submodules = true;
-        };
+        # Use the local working tree snapshot so private submodules do not need
+        # to be fetched over SSH by the Nix daemon.
+        gardesk-src = gardesk;
 
         # Helper for Rust packages
         mkRustPackage = { pname, version, src, cargoHash ? null, cargoLock ? null

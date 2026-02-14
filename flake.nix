@@ -43,8 +43,8 @@
         # Shared source for gardesk suite (monorepo with submodules)
         gardesk-src = pkgs.fetchgit {
           url = "https://github.com/gardesk/gardesk";
-          rev = "50450bd2bfff346a3c40407813c2c528deebceb4";
-          hash = "sha256-dFJr7Bdp0aSDnzae5fVjuchWScJKGBwD62F3/8RIgEQ=";
+          rev = "ab4c87f1d09bbab431547f1662052b126a8580b9";
+          hash = "sha256-iDyH1zyP2GlC3axFLJrY146gVArBmIfwDZvcrQgDTnA=";
           fetchSubmodules = true;
           name = "gardesk-src";
         };
@@ -1101,7 +1101,7 @@
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
               sourceRoot = "gardesk-src/garterm";
-              hash = "sha256-WHpAsQyLg8n84NRX8PZdpVxm1RTuuq501WoNF4hXTbU=";
+              hash = "sha256-D5wuHnbxF+MnkDUpr1uUwUOxI647H4t+F4/J3K9Emv0=";
             };
             cargoRoot = "garterm";
 

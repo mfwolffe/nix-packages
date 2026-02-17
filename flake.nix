@@ -43,8 +43,8 @@
         # Shared source for gardesk suite (monorepo with submodules)
         gardesk-src = pkgs.fetchgit {
           url = "https://github.com/gardesk/gardesk";
-          rev = "29db96441862ad7be275d86b4fe8a394a2569779";
-          hash = "sha256-o9SseOacB/zZaZE/3X2/Bc6NsBu2Q4ZRTQOahWX3fHM=";
+          rev = "5819877bb8fda48541d94c1b9f51db9fb8e567fe";
+          hash = "sha256-Ifjmmvm1B4l8KuABk+B7TuoppYAYMDMDO9TkjK67NJI=";
           fetchSubmodules = true;
           name = "gardesk-src";
         };
@@ -528,7 +528,7 @@
             version = "0.3.0";
             src = gardesk-src;
             sourceRoot = "gardesk-src/garbg";
-            cargoHash = "sha256-3g28p0zkYZhDYaf7LzufdRTOyc5Jy6/gs8UDZQpybAA=";
+            cargoHash = "sha256-z0W4UqZ59XW2I0v3KbWTHi+9HteTNwajqwpBvsJk3sQ=";
 
             # Use ffmpeg_7 (not ffmpeg-full/8.0) - avfft.h removed in FFmpeg 8.0
             nativeBuildInputs = with pkgs; [ pkg-config clang llvmPackages.libclang ];
@@ -701,7 +701,7 @@
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
               sourceRoot = "gardesk-src/garlaunch";
-              hash = "sha256-kSyQSAIynkWATdQX36pBBvl5Pd/NbxaSF/Msalp9Wao=";
+              hash = "sha256-99NnJs+9RUzMO8cUBT8LpWj8q+bK2bPfVxLZS20e4qo=";
             };
             cargoRoot = "garlaunch";
 
@@ -929,7 +929,7 @@
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
               sourceRoot = "gardesk-src/gartray";
-              hash = "sha256-45vfYhbmduS81EMBLu7iTzCm9/rRS+sSlN/9J13WiGE=";
+              hash = "sha256-N/4aw4hQHt5OLisUMKXaHqRBmr5WQl0Ust6V3i1B8Hg=";
             };
             cargoRoot = "gartray";
 
@@ -1152,7 +1152,7 @@
             version = "0.1.1";
             src = gardesk-src;
             sourceRoot = "gardesk-src/garnotify";
-            cargoHash = "sha256-iNh+EzKhqp7/egFedYQQa6TZK8e+PlpZRy1/gQ+d/MQ=";
+            cargoHash = "sha256-hTCLr00sQp5eV7rksLHo10pg8Nk7PrG8irOz5Ex1XNs=";
 
             nativeBuildInputs = with pkgs; [ pkg-config ];
             buildInputs = with pkgs; [
@@ -1205,7 +1205,7 @@
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
               sourceRoot = "gardesk-src/gargears";
-              hash = "sha256-iGa0TeLUntIKuRKndShwY/UjwXHzMbMLhrAoPgG78vQ=";
+              hash = "sha256-2h3rkhjIlIHwrWaVA57Bela2Hpdk99tULXGJ4eEZRos=";
             };
             cargoRoot = "gargears";
 
@@ -1259,7 +1259,7 @@
               inherit (pkgs.stdenv.hostPlatform) system;
               src = gardesk-src;
               sourceRoot = "gardesk-src/gartop";
-              hash = "sha256-bnJhdubk5ic6IKGqCF+4DNKbtlmK3lmaykUvJnF/bL8=";
+              hash = "sha256-zTm5/4cEqorn8Pqk44eBM6/Q4oXs713/m5xthhjNWKg=";
             };
             cargoRoot = "gartop";
 

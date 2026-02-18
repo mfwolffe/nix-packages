@@ -11,11 +11,11 @@
       codexPkg = pkgs:
         pkgs.stdenv.mkDerivation {
           pname = "codex";
-          version = "0.98.0";
+          version = "0.103.0";
           src = pkgs.fetchurl {
             url =
-              "https://github.com/openai/codex/releases/download/rust-v0.98.0/codex-x86_64-unknown-linux-musl.tar.gz";
-            hash = "sha256-wJ7m7G8e71iCS96hTvsQre5U4OPFzL+k4/862bDd3IM=";
+              "https://github.com/openai/codex/releases/download/rust-v0.103.0/codex-x86_64-unknown-linux-musl.tar.gz";
+            hash = "sha256-jV9nluiewUVID6qmT1wuiT/TzYaaJ5aa0bRMXnZdQfY=";
           };
           dontBuild = true;
           dontUnpack = true;
@@ -43,8 +43,8 @@
         # Shared source for gardesk suite (monorepo with submodules)
         gardesk-src = pkgs.fetchgit {
           url = "https://github.com/gardesk/gardesk";
-          rev = "1f8968cec66a0a7e9df573de3a252ca90429cde7";
-          hash = "sha256-p8DCDxgaV48WD905umv6eRqMmM/zdxMbx+0zSiRNPio=";
+          rev = "cbadb40e58c31b2cab53c2b17e95758c4c6d8032";
+          hash = "sha256-2QT3QcCSVNnFNRdKwABD+c6kkZPrevxbfXjNjtI5cMk=";
           fetchSubmodules = true;
           name = "gardesk-src";
         };
@@ -1016,6 +1016,59 @@
             meta = {
               description = "X11 compositor with GPU rendering for the gar desktop suite";
               homepage = "https://github.com/gardesk/garchomp";
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+
+          # gardisplay: Display/monitor configuration tool (needs full tree for gartk)
+          gardisplay = pkgs.stdenv.mkDerivation {
+            pname = "gardisplay";
+            version = "0.1.0";
+            src = gardesk-src;
+
+            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc ];
+            buildInputs = with pkgs; [
+              libxcb
+              libx11
+              libxrandr
+              cairo
+              pango
+              glib
+              harfbuzz
+              freetype
+              fontconfig
+            ];
+
+            cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+              inherit (pkgs.stdenv.hostPlatform) system;
+              src = gardesk-src;
+              sourceRoot = "gardesk-src/gardisplay";
+              hash = "sha256-J3EGT+fYgePLGLmWBqxp5JJqJ3eOV7oEYCOPXo+qQA0=";
+            };
+            cargoRoot = "gardisplay";
+
+            buildPhase = ''
+              cd gardisplay
+              cargo build --release --offline -p gardisplay
+            '';
+
+            installPhase = ''
+              mkdir -p $out/bin $out/share/applications
+              cp target/release/gardisplay $out/bin/
+              cat > $out/share/applications/gardisplay.desktop << EOF
+              [Desktop Entry]
+              Name=Gardisplay
+              Comment=Display and monitor configuration
+              Exec=$out/bin/gardisplay
+              Terminal=false
+              Type=Application
+              Categories=Settings;HardwareSettings;
+              EOF
+            '';
+
+            meta = {
+              description = "Display and monitor configuration tool for the gar desktop suite";
+              homepage = "https://github.com/gardesk/gardisplay";
               license = pkgs.lib.licenses.mit;
             };
           };

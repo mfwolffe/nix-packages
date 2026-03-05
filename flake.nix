@@ -339,9 +339,9 @@
               owner = "tenseleyFlow";
               repo = "hyprKVM";
               rev = "v0.6.6";
-              hash = "sha256-bxzHVAdGKSpBuCUrynzBJL6zOUk0m5Q6b3RwZcswWyE=";
+              hash = "sha256-glF9Yma6Fzw06xzYqJ16wWDA6eizZb/N2ixEau3eQ18=";
             };
-            cargoHash = "sha256-yoYaamk7yZxTB2WaxrJZXe9Gtlp/Kt52MTukSw3gxzo=";
+            cargoHash = "sha256-BbdP2RHlHXg4mKsKYrfI50dg44FntA7IwN7lUewzm30=";
             buildInputs = with pkgs; [ wayland wayland-protocols libxkbcommon ];
             postInstall = ''
               mkdir -p $out/share/applications
@@ -1856,15 +1856,15 @@
 
           gitswitcher = mkCMakePackage {
             pname = "gitswitcher";
-            version = "1.1.9";
+            version = "1.1.11";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "gitswitchC";
-              rev = "v1.1.9";
-              hash = "sha256-NMieHzCZJ71LvuFhVRq4B+5RIbMtvZlHOYS4rLOXCJ0=";
+              rev = "v1.1.11";
+              hash = "sha256-HS90BPPgn/qi+YBLLkVg18mi7EhD7ngWXyNMYZv8Y08=";
             };
             buildInputs = with pkgs; [ git openssh openssl ];
-            makeFlags = [ "BUILD_TYPE=release" "VERSION=1.1.9" "COMMIT=b9a8f5e" ];
+            makeFlags = [ "BUILD_TYPE=release" "VERSION=1.1.11" "COMMIT=64a8fb4" ];
             installPhase = ''
               runHook preInstall
               mkdir -p $out/bin $out/share/applications
@@ -1890,15 +1890,15 @@
 
           gitswitch-c = mkCMakePackage {
             pname = "gitswitch-c";
-            version = "1.1.9";
+            version = "1.1.11";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "gitswitchC";
-              rev = "v1.1.9";
-              hash = "sha256-NMieHzCZJ71LvuFhVRq4B+5RIbMtvZlHOYS4rLOXCJ0=";
+              rev = "v1.1.11";
+              hash = "sha256-HS90BPPgn/qi+YBLLkVg18mi7EhD7ngWXyNMYZv8Y08=";
             };
             buildInputs = with pkgs; [ git openssh openssl ];
-            makeFlags = [ "BUILD_TYPE=release" "VERSION=1.1.9" "COMMIT=b9a8f5e" ];
+            makeFlags = [ "BUILD_TYPE=release" "VERSION=1.1.11" "COMMIT=64a8fb4" ];
             installPhase = ''
               runHook preInstall
               mkdir -p $out/bin $out/share/applications

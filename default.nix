@@ -347,12 +347,12 @@ let
 
     fortsh = mkFortranMakePackage {
       pname = "fortsh";
-      version = "1.0.1";
+      version = "1.2.0";
       src = pkgs.fetchFromGitHub {
         owner = "FortranGoingOnForty";
         repo = "fortsh";
-        rev = "v1.0.1";
-        hash = "sha256-ijzzh2rhNrbfVpwvkr3ZFMNa+uMWUwp6vjduAHAI6fM=";
+        rev = "v1.2.0";
+        hash = "sha256-oV46ysXBFHZ4BF+F3QfBrD1Kpawy+/51/LqidsiUkIc=";
       };
       buildPhase = "make release";
       installPhase = ''

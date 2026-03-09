@@ -43,8 +43,8 @@
         # Shared source for gardesk suite (monorepo with submodules)
         gardesk-src = pkgs.fetchgit {
           url = "https://github.com/gardesk/gardesk";
-          rev = "82c5ca3fc1c3decdfbb6ba5ca04c235a06d12b0e";
-          hash = "sha256-pRH84YWg8EQ9yezZtR0lUvE6ZISEbdevQ+DtHXStBGE=";
+          rev = "e09dce565666e5de52cb300326b6a32154bcd3e1";
+          hash = "sha256-gm1mGFlfrvo4PqmQBllCTZf20NeXhLhMMQQ6Rgb9VTo=";
           fetchSubmodules = true;
           name = "gardesk-src";
         };
@@ -1611,12 +1611,12 @@
 
           fortsh = mkFortranMakePackage {
             pname = "fortsh";
-            version = "1.2.0";
+            version = "1.3.1";
             src = pkgs.fetchFromGitHub {
               owner = "FortranGoingOnForty";
               repo = "fortsh";
-              rev = "v1.2.0";
-              hash = "sha256-CPMeQ0mLi5eCkAwPDh9NUu5QSrWj5T8/PwW95iVJkA4=";
+              rev = "v1.3.1";
+              hash = "sha256-lf7uA1qx11cymbtCNhbnv7XbUn/NL/tnLFd/BP7/FFw=";
             };
             buildPhase = "make release";
             installPhase = ''

@@ -400,7 +400,7 @@
               owner = "tenseleyFlow";
               repo = "gump";
               rev = "v0.2.6";
-              hash = "sha256-Gr6lDz3OsgpqkOB7yMwxogSf2SCp/UcUq7fd3FeRSOU=";
+              hash = "sha256-bug5AD81GEczfy+Q/FqO1J1Oyfg1HwskkJdQT1HV/v0=";
             };
             cargoHash = "sha256-Mv5hZ0SWwzkmiyRUmzG32Azf0K32W+Qw/hRGoj2k8yQ=";
             meta = {

@@ -352,7 +352,7 @@ let
         owner = "FortranGoingOnForty";
         repo = "fortsh";
         rev = "v1.2.0";
-        hash = "sha256-oV46ysXBFHZ4BF+F3QfBrD1Kpawy+/51/LqidsiUkIc=";
+        hash = "sha256-CPMeQ0mLi5eCkAwPDh9NUu5QSrWj5T8/PwW95iVJkA4=";
       };
       buildPhase = "make release";
       installPhase = ''

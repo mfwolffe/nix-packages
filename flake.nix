@@ -395,14 +395,14 @@
 
           gump = pkgs.rustPlatform.buildRustPackage {
             pname = "gump";
-            version = "0.2.2";
+            version = "0.2.6";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "gump";
-              rev = "v0.2.2";
-              hash = "sha256-2Q4WqPolSXe54giWX4T9FtDPoj3nSm9vViZza1cGjFo=";
+              rev = "v0.2.6";
+              hash = "sha256-Gr6lDz3OsgpqkOB7yMwxogSf2SCp/UcUq7fd3FeRSOU=";
             };
-            cargoHash = "sha256-njCeiFTaQ0NN5Jp2COOwq9HQhrIkykcjJz73CtzHvRo=";
+            cargoHash = "sha256-Mv5hZ0SWwzkmiyRUmzG32Azf0K32W+Qw/hRGoj2k8yQ=";
             meta = {
               description = "A smarter cd command - zoxide without the z";
               homepage = "https://github.com/tenseleyFlow/gump";
@@ -1611,12 +1611,12 @@
 
           fortsh = mkFortranMakePackage {
             pname = "fortsh";
-            version = "1.0.1";
+            version = "1.2.0";
             src = pkgs.fetchFromGitHub {
               owner = "FortranGoingOnForty";
               repo = "fortsh";
-              rev = "v1.0.1";
-              hash = "sha256-ijzzh2rhNrbfVpwvkr3ZFMNa+uMWUwp6vjduAHAI6fM=";
+              rev = "v1.2.0";
+              hash = "sha256-CPMeQ0mLi5eCkAwPDh9NUu5QSrWj5T8/PwW95iVJkA4=";
             };
             buildPhase = "make release";
             installPhase = ''

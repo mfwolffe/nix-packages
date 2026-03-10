@@ -1611,12 +1611,12 @@
 
           fortsh = mkFortranMakePackage {
             pname = "fortsh";
-            version = "1.3.1";
+            version = "1.3.3";
             src = pkgs.fetchFromGitHub {
               owner = "FortranGoingOnForty";
               repo = "fortsh";
-              rev = "v1.3.1";
-              hash = "sha256-lf7uA1qx11cymbtCNhbnv7XbUn/NL/tnLFd/BP7/FFw=";
+              rev = "v1.3.3";
+              hash = "sha256-Wk7uBOc3zU8LNVi0An4d5CtUJy/VCdp+W+ORyHP+HSE=";
             };
             buildPhase = "make release";
             installPhase = ''

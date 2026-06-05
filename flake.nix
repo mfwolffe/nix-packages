@@ -43,8 +43,8 @@
         # Shared source for gardesk suite (monorepo with submodules)
         gardesk-src = pkgs.fetchgit {
           url = "https://github.com/gardesk/gardesk";
-          rev = "df3bc45eff50af2dc94e64c98ffa3e1654c226f9";
-          hash = "sha256-A71TTf1kZfekmXlOOixt68azU5Y6CUN6iZ/F4dcHXNs=";
+          rev = "1ec7dc5";
+          hash = "sha256-mJokPvOSh1GG4NxlO4iryAno9oyeInUWMmtsiwWGpAo=";
           fetchSubmodules = true;
           name = "gardesk-src";
         };
@@ -963,7 +963,7 @@
             sourceRoot = "gardesk-src/garchomp";
             cargoHash = "sha256-30gKhImp0mVUzz1CUxv5g7dDsJC0+OQ50rZAn4C137c=";
 
-            nativeBuildInputs = with pkgs; [ pkg-config makeWrapper ];
+            nativeBuildInputs = with pkgs; [ pkg-config addDriverRunpath ];
             buildInputs = with pkgs; [
               libxcb
               libx11
@@ -980,16 +980,16 @@
 
             cargoBuildFlags = [ "-p" "garchomp" "-p" "garchompctl" ];
 
-            postInstall = ''
-              # Wrap with GPU library paths for wgpu dlopen (libEGL, libvulkan)
-              wrapProgram $out/bin/garchomp \
-                --prefix LD_LIBRARY_PATH : ${
-                  lib.makeLibraryPath [
-                    pkgs.libglvnd
-                    pkgs.vulkan-loader
-                  ]
-                }:/run/opengl-driver/lib
+            # Inject GL/Vulkan paths into RUNPATH instead of wrapping with
+            # LD_LIBRARY_PATH (which would leak GL/Vulkan paths to all child
+            # processes of the compositor). See garterm below for details.
+            postFixup = ''
+              patchelf --add-rpath ${lib.makeLibraryPath [ pkgs.libglvnd pkgs.vulkan-loader ]} \
+                $out/bin/garchomp $out/bin/garchompctl
+              addDriverRunpath $out/bin/garchomp $out/bin/garchompctl
+            '';
 
+            postInstall = ''
               # Install systemd user service
               mkdir -p $out/lib/systemd/user
               cat > $out/lib/systemd/user/garchomp.service << EOF
@@ -1134,7 +1134,7 @@
             version = "0.1.2";
             src = gardesk-src;
 
-            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc makeWrapper ];
+            nativeBuildInputs = with pkgs; [ pkg-config rustPlatform.cargoSetupHook cargo rustc addDriverRunpath ];
             buildInputs = with pkgs; [
               libxcb
               libx11
@@ -1168,15 +1168,6 @@
               cp target/release/garterm $out/bin/
               cp target/release/gartermctl $out/bin/
 
-              # Wrap with GPU library paths for wgpu dlopen (libEGL, libvulkan)
-              wrapProgram $out/bin/garterm \
-                --prefix LD_LIBRARY_PATH : ${
-                  lib.makeLibraryPath [
-                    pkgs.libglvnd
-                    pkgs.vulkan-loader
-                  ]
-                }:/run/opengl-driver/lib
-
               cat > $out/share/applications/garterm.desktop << EOF
               [Desktop Entry]
               Name=Garterm
@@ -1190,6 +1181,20 @@
               # Install default config
               mkdir -p $out/share/garterm/config
               install -Dm644 ../config/garterm/config.toml $out/share/garterm/config/config.toml
+            '';
+
+            # Inject GL/Vulkan paths into RUNPATH so wgpu can dlopen
+            # libvulkan/libEGL without LD_LIBRARY_PATH. Wrapping with
+            # LD_LIBRARY_PATH leaks the path to every child process (incl.
+            # user shells), which triggers CUDA/protobuf crashes when those
+            # children load unrelated GL-adjacent libs.
+            #   libglvnd       → libGL.so.1, libEGL.so.1 (GLVND dispatchers)
+            #   vulkan-loader  → libvulkan.so.1 (Vulkan loader)
+            #   /run/opengl-driver/lib → vendor backends (libGLX_nvidia.so, etc.)
+            postFixup = ''
+              patchelf --add-rpath ${lib.makeLibraryPath [ pkgs.libglvnd pkgs.vulkan-loader ]} \
+                $out/bin/garterm $out/bin/gartermctl
+              addDriverRunpath $out/bin/garterm $out/bin/gartermctl
             '';
 
             meta = {
@@ -1856,15 +1861,15 @@
 
           gitswitcher = mkCMakePackage {
             pname = "gitswitcher";
-            version = "1.1.11";
+            version = "1.1.13";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "gitswitchC";
-              rev = "v1.1.11";
-              hash = "sha256-HS90BPPgn/qi+YBLLkVg18mi7EhD7ngWXyNMYZv8Y08=";
+              rev = "v1.1.13";
+              hash = "sha256-oTiBAeh4OZgY6DStIGT1ue4wN5UYTE9wY7SfCx4fqkg=";
             };
             buildInputs = with pkgs; [ git openssh openssl ];
-            makeFlags = [ "BUILD_TYPE=release" "VERSION=1.1.11" "COMMIT=64a8fb4" ];
+            makeFlags = [ "BUILD_TYPE=release" "VERSION=1.1.13" "COMMIT=c74baec" ];
             installPhase = ''
               runHook preInstall
               mkdir -p $out/bin $out/share/applications
@@ -1890,15 +1895,15 @@
 
           gitswitch-c = mkCMakePackage {
             pname = "gitswitch-c";
-            version = "1.1.11";
+            version = "1.1.13";
             src = pkgs.fetchFromGitHub {
               owner = "tenseleyFlow";
               repo = "gitswitchC";
-              rev = "v1.1.11";
-              hash = "sha256-HS90BPPgn/qi+YBLLkVg18mi7EhD7ngWXyNMYZv8Y08=";
+              rev = "v1.1.13";
+              hash = "sha256-oTiBAeh4OZgY6DStIGT1ue4wN5UYTE9wY7SfCx4fqkg=";
             };
             buildInputs = with pkgs; [ git openssh openssl ];
-            makeFlags = [ "BUILD_TYPE=release" "VERSION=1.1.11" "COMMIT=64a8fb4" ];
+            makeFlags = [ "BUILD_TYPE=release" "VERSION=1.1.13" "COMMIT=c74baec" ];
             installPhase = ''
               runHook preInstall
               mkdir -p $out/bin $out/share/applications

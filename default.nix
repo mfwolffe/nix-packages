@@ -529,15 +529,15 @@ let
 
     gitswitcher = mkCMakePackage {
       pname = "gitswitcher";
-      version = "1.1.11";
+      version = "1.1.13";
       src = pkgs.fetchFromGitHub {
         owner = "tenseleyFlow";
         repo = "gitswitchC";
-        rev = "v1.1.11";
-        hash = "sha256-HS90BPPgn/qi+YBLLkVg18mi7EhD7ngWXyNMYZv8Y08=";
+        rev = "v1.1.13";
+        hash = "sha256-oTiBAeh4OZgY6DStIGT1ue4wN5UYTE9wY7SfCx4fqkg=";
       };
       buildInputs = with pkgs; [ git openssh openssl ];
-      makeFlags = [ "BUILD_TYPE=release" "VERSION=1.1.11" "COMMIT=64a8fb4" ];
+      makeFlags = [ "BUILD_TYPE=release" "VERSION=1.1.13" "COMMIT=c74baec" ];
       installPhase = ''
         runHook preInstall
         mkdir -p $out/bin
@@ -554,15 +554,15 @@ let
 
     gitswitch-c = mkCMakePackage {
       pname = "gitswitch-c";
-      version = "1.1.11";
+      version = "1.1.13";
       src = pkgs.fetchFromGitHub {
         owner = "tenseleyFlow";
         repo = "gitswitchC";
-        rev = "v1.1.11";
-        hash = "sha256-HS90BPPgn/qi+YBLLkVg18mi7EhD7ngWXyNMYZv8Y08=";
+        rev = "v1.1.13";
+        hash = "sha256-oTiBAeh4OZgY6DStIGT1ue4wN5UYTE9wY7SfCx4fqkg=";
       };
       buildInputs = with pkgs; [ git openssh openssl ];
-      makeFlags = [ "BUILD_TYPE=release" "VERSION=1.1.11" "COMMIT=64a8fb4" ];
+      makeFlags = [ "BUILD_TYPE=release" "VERSION=1.1.13" "COMMIT=c74baec" ];
       installPhase = ''
         runHook preInstall
         mkdir -p $out/bin
